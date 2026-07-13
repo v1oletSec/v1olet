@@ -1,0 +1,189 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-lavender: var(--lavender);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+:root {
+  color-scheme: dark;
+  --background: oklch(0.14 0.028 275);
+  --foreground: oklch(0.9 0.02 275);
+  --card: oklch(0.19 0.035 275);
+  --card-foreground: oklch(0.92 0.015 275);
+  --popover: oklch(0.19 0.035 275);
+  --popover-foreground: oklch(0.92 0.015 275);
+  --primary: oklch(0.52 0.24 285);
+  --primary-foreground: oklch(0.98 0.005 275);
+  --secondary: oklch(0.24 0.04 275);
+  --secondary-foreground: oklch(0.92 0.015 275);
+  --muted: oklch(0.24 0.04 275);
+  --muted-foreground: oklch(0.62 0.03 272);
+  --accent: oklch(0.7 0.14 292);
+  --accent-foreground: oklch(0.14 0.028 275);
+  --destructive: oklch(0.62 0.22 20);
+  --border: oklch(0.3 0.04 275);
+  --input: oklch(0.3 0.04 275);
+  --ring: oklch(0.52 0.24 285);
+  --panel: oklch(0.17 0.035 275);
+  --panel-2: oklch(0.21 0.04 275);
+  --lavender: oklch(0.78 0.11 292);
+  --radius: 0.625rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes sheen {
+  0% {
+    transform: translateX(-120%) skewX(-20deg);
+  }
+  60%,
+  100% {
+    transform: translateX(220%) skewX(-20deg);
+  }
+}
+
+@keyframes borderPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 oklch(0.52 0.24 285 / 0.35);
+  }
+  50% {
+    box-shadow: 0 0 22px 2px oklch(0.52 0.24 285 / 0.35);
+  }
+}
+
+@keyframes gridScroll {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 40px;
+  }
+}
+
+@keyframes spinSlow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes btnGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 oklch(0.7 0.14 292 / 0);
+  }
+  50% {
+    box-shadow: 0 0 20px 1px oklch(0.7 0.14 292 / 0.45);
+  }
+}
+
+@keyframes autoSheen {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(260%) skewX(-20deg);
+  }
+}
+
+/* continuously sweeping shine used on the primary hero button */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 45%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    oklch(0.98 0.005 275 / 0.35),
+    transparent
+  );
+  transform: translateX(-150%) skewX(-20deg);
+  animation: autoSheen 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.card-sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    oklch(0.78 0.11 292 / 0.14) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%) skewX(-20deg);
+  pointer-events: none;
+}
+
+.group:hover .card-sheen::after {
+  animation: sheen 0.9s ease-out;
+}
