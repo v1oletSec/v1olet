@@ -241,6 +241,13 @@ h2 .lav{color:var(--lavender)}
 .socials a:hover{transform:translateY(-2px);border-color:var(--accent);color:var(--accent)}
 .socials svg{width:16px;height:16px;fill:currentColor}
 
+
+/* equal-height player cards */
+.cap-grid > .reveal,.core-grid > .reveal{display:flex}
+.cap-card,.core-card{display:flex;flex-direction:column;width:100%}
+.cap-card .skills,.core-card .skills{margin-top:auto;padding-top:16px}
+.core-card blockquote{margin-bottom:4px}
+
 /* ============ contact ============ */
 .contact-grid{display:grid;gap:20px}
 @media(min-width:768px){.contact-grid{grid-template-columns:1fr 1fr}}
