@@ -140,26 +140,26 @@ console.log('%cLooking under the hood? We like that.\nflag: v1{r34d_th3_s0urc3_n
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   const COLORS = {
-    primary:  { petal: '#4e2bcc', core: '#905bf4' },
-    lavender: { petal: '#905bf4', core: '#4e2bcc' }
+    primary:  { petal: '78 43 204', core: '144 91 244' },
+    lavender: { petal: '144 91 244', core: '78 43 204' }
   };
   function drawFlower(r, kind, alpha){
     const c = COLORS[kind], petals = 6;
-    ctx.shadowColor = `${c.petal} / 0.9)`;
+    ctx.shadowColor = `rgb(${c.petal} / 0.9)`;
     ctx.shadowBlur = r * 0.9;
     for (let i = 0; i < petals; i++) {
       ctx.save();
       ctx.rotate((i / petals) * Math.PI * 2);
       ctx.beginPath();
       ctx.ellipse(0, -r * 0.62, r * 0.34, r * 0.6, 0, 0, Math.PI * 2);
-      ctx.fillStyle = `${c.petal} / ${alpha})`;
+      ctx.fillStyle = `rgb(${c.petal} / ${alpha})`;
       ctx.fill();
       ctx.restore();
     }
     ctx.shadowBlur = 0;
     ctx.beginPath();
     ctx.arc(0, 0, r * 0.28, 0, Math.PI * 2);
-    ctx.fillStyle = `${c.core} / ${Math.min(1, alpha + 0.25)})`;
+    ctx.fillStyle = `rgb(${c.core} / ${Math.min(1, alpha + 0.25)})`;
     ctx.fill();
   }
   let dpr, width = 0, height = 0, flowers = [];
