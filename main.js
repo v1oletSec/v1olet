@@ -121,6 +121,28 @@ addEventListener('scroll', onScroll, { passive: true });
 tt.addEventListener('click', () => scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }));
 
 
+/* ---- theme toggle (honours system preference; user choice persists) ---- */
+(function initTheme(){
+  const root = document.documentElement;
+  const btn = document.getElementById('theme-toggle');
+  const media = matchMedia('(prefers-color-scheme: light)');
+
+  const apply = (theme) => { root.dataset.theme = theme; };
+
+  // Follow the OS unless the user has picked a theme this session.
+  media.addEventListener?.('change', (e) => {
+    if (!localStorage.getItem('theme')) apply(e.matches ? 'light' : 'dark');
+  });
+
+  btn?.addEventListener('click', () => {
+    const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+    apply(next);
+    try { localStorage.setItem('theme', next); } catch { /* storage unavailable — session-only */ }
+    btn.setAttribute('aria-label', `Switch to ${next === 'light' ? 'dark' : 'light'} theme`);
+  });
+})();
+
+
 /* ---- nav active section highlight ---- */
 const navLinks = [...document.querySelectorAll('nav .links a')];
 const secIO = new IntersectionObserver(es => es.forEach(e => {
@@ -140,8 +162,8 @@ console.log('%cLooking under the hood? We like that.\nflag: v1{r34d_th3_s0urc3_n
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   const COLORS = {
-    primary:  { petal: '78 43 204', core: '144 91 244' },
-    lavender: { petal: '144 91 244', core: '78 43 204' }
+    primary:  { petal: '104 64 244', core: '104 64 244' },
+    accent: { petal: '104 64 244', core: '104 64 244' }
   };
   function drawFlower(r, kind, alpha){
     const c = COLORS[kind], petals = 6;
@@ -163,6 +185,7 @@ console.log('%cLooking under the hood? We like that.\nflag: v1{r34d_th3_s0urc3_n
     ctx.fill();
   }
   let dpr, width = 0, height = 0, flowers = [];
+  const container = canvas.parentElement;
   const spawn = (initial = false) => {
     const size = 6 + Math.random() * 14;
     return {
@@ -175,22 +198,28 @@ console.log('%cLooking under the hood? We like that.\nflag: v1{r34d_th3_s0urc3_n
       swayAmp: 8 + Math.random() * 26,
       angle: Math.random() * Math.PI * 2,
       spin: (Math.random() - 0.5) * 1.2,
-      hue: Math.random() > 0.5 ? 'primary' : 'lavender',
-      alpha: 0.28 + Math.random() * 0.4
+      hue: Math.random() > 0.5 ? 'primary' : 'accent',
+      alpha: 0.01 + Math.random() * 0.2
     };
   };
   function resize(){
-    width = innerWidth; height = innerHeight;
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    if (w === width && h === height) return;
+    width = w; height = h;
     dpr = Math.min(devicePixelRatio || 1, 2);
     canvas.width = width * dpr; canvas.height = height * dpr;
     canvas.style.width = width + 'px'; canvas.style.height = height + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const target = Math.round((width * height) / 42000);
-    const count = Math.max(14, Math.min(38, target));
+    const count = Math.max(20, Math.min(1200, target));
     flowers = Array.from({ length: count }, () => spawn(true));
   }
   resize();
   addEventListener('resize', resize);
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(resize).observe(container);
+  }
   let last = performance.now();
   (function loop(now){
     const dt = Math.min(0.05, (now - last) / 1000);
