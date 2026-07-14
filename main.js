@@ -1,4 +1,4 @@
-import { roster, events } from './src/data.js';
+import { roster, events } from './data.js';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -155,56 +155,62 @@ document.querySelectorAll('section[id]').forEach(sec => secIO.observe(sec));
 console.log('%c v1olet_ ', 'background:#4e2bcc;color:#fff;font-size:22px;font-weight:bold;padding:6px 10px');
 console.log('%cLooking under the hood? We like that.\nflag: v1{r34d_th3_s0urc3_n0w_4pply}\napply -> https://forms.gle/sRLQVVkSxt32uKhk8', 'color:#905bf4;font-family:monospace;font-size:13px');
 
-/* ---- flower rain (ported from flower-rain.tsx) ---- */
+/* ---- flower rain (sprite-cached: glow is rendered once per flower,
+        not every frame — this is what fixes the lag) ---- */
 (function(){
   if (reduced) return;
   const canvas = document.getElementById('flower-rain');
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
-  const COLORS = {
-    primary:  { petal: '104 64 244', core: '104 64 244' },
-    accent: { petal: '104 64 244', core: '104 64 244' }
-  };
-  function drawFlower(r, kind, alpha){
-    const c = COLORS[kind], petals = 6;
-    ctx.shadowColor = `rgb(${c.petal} / 0.9)`;
-    ctx.shadowBlur = r * 0.9;
-    for (let i = 0; i < petals; i++) {
-      ctx.save();
-      ctx.rotate((i / petals) * Math.PI * 2);
-      ctx.beginPath();
-      ctx.ellipse(0, -r * 0.62, r * 0.34, r * 0.6, 0, 0, Math.PI * 2);
-      ctx.fillStyle = `rgb(${c.petal} / ${alpha})`;
-      ctx.fill();
-      ctx.restore();
+  const PETAL = '104 64 244';
+
+  // pre-render one flower to a small offscreen canvas (expensive shadowBlur runs ONCE here)
+  function makeSprite(size, alpha){
+    const pad = Math.ceil(size * 1.6);
+    const s = document.createElement('canvas');
+    const d = Math.ceil((size + pad) * 2);
+    s.width = s.height = d;
+    const c = s.getContext('2d');
+    c.translate(d / 2, d / 2);
+    c.shadowColor = `rgb(${PETAL} / 0.9)`;
+    c.shadowBlur = size * 0.9;
+    for (let i = 0; i < 6; i++) {
+      c.save();
+      c.rotate((i / 6) * Math.PI * 2);
+      c.beginPath();
+      c.ellipse(0, -size * 0.62, size * 0.34, size * 0.6, 0, 0, Math.PI * 2);
+      c.fillStyle = `rgb(${PETAL} / ${alpha})`;
+      c.fill();
+      c.restore();
     }
-    ctx.shadowBlur = 0;
-    ctx.beginPath();
-    ctx.arc(0, 0, r * 0.28, 0, Math.PI * 2);
-    ctx.fillStyle = `rgb(${c.core} / ${Math.min(1, alpha + 0.25)})`;
-    ctx.fill();
+    c.shadowBlur = 0;
+    c.beginPath();
+    c.arc(0, 0, size * 0.28, 0, Math.PI * 2);
+    c.fillStyle = `rgb(${PETAL} / ${Math.min(1, alpha + 0.25)})`;
+    c.fill();
+    return s;
   }
+
   let dpr, width = 0, height = 0, flowers = [];
-  const container = canvas.parentElement;
   const spawn = (initial = false) => {
     const size = 6 + Math.random() * 14;
+    const alpha = 0.22 + Math.random() * 0.3;
     return {
       x: Math.random() * width,
       y: initial ? Math.random() * height : -size * 2,
       size,
+      sprite: makeSprite(size, alpha),
       speed: 14 + Math.random() * 30 + size,
       drift: (Math.random() - 0.5) * 16,
       sway: Math.random() * Math.PI * 2,
       swayAmp: 8 + Math.random() * 26,
       angle: Math.random() * Math.PI * 2,
-      spin: (Math.random() - 0.5) * 1.2,
-      hue: Math.random() > 0.5 ? 'primary' : 'accent',
-      alpha: 0.01 + Math.random() * 0.2
+      spin: (Math.random() - 0.5) * 1.2
     };
   };
   function resize(){
-    const w = container.clientWidth;
-    const h = container.clientHeight;
+    // canvas is viewport-fixed: cheap, constant-size backing store
+    const w = innerWidth, h = innerHeight;
     if (w === width && h === height) return;
     width = w; height = h;
     dpr = Math.min(devicePixelRatio || 1, 2);
@@ -212,14 +218,11 @@ console.log('%cLooking under the hood? We like that.\nflag: v1{r34d_th3_s0urc3_n
     canvas.style.width = width + 'px'; canvas.style.height = height + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const target = Math.round((width * height) / 42000);
-    const count = Math.max(20, Math.min(1200, target));
+    const count = Math.max(14, Math.min(40, target));
     flowers = Array.from({ length: count }, () => spawn(true));
   }
   resize();
   addEventListener('resize', resize);
-  if (typeof ResizeObserver !== 'undefined') {
-    new ResizeObserver(resize).observe(container);
-  }
   let last = performance.now();
   (function loop(now){
     const dt = Math.min(0.05, (now - last) / 1000);
@@ -233,7 +236,7 @@ console.log('%cLooking under the hood? We like that.\nflag: v1{r34d_th3_s0urc3_n
       ctx.save();
       ctx.translate(f.x, f.y);
       ctx.rotate(f.angle);
-      drawFlower(f.size, f.hue, f.alpha);
+      ctx.drawImage(f.sprite, -f.sprite.width / (2 * 1), -f.sprite.height / 2, f.sprite.width / 1, f.sprite.height / 1);
       ctx.restore();
       if (f.y - f.size > height) Object.assign(f, spawn(false));
       if (f.x < -40) f.x = width + 40;

@@ -78,7 +78,7 @@ strong,b{color:var(--accent)}
 .page-bg{pointer-events:none;position:absolute;inset:0;z-index:0;overflow:hidden}
 .page-bg .glow-top{position:absolute;top:-160px;left:50%;height:520px;width:820px;max-width:100vw;transform:translateX(-50%);
   border-radius:9999px;filter:blur(120px);background:#6840f411}
-.page-bg canvas{position:absolute;inset:0;pointer-events:none}
+.page-bg canvas{position:fixed;inset:0;pointer-events:none}
 
 .z10{position:relative;z-index:10}
 
@@ -222,7 +222,7 @@ h2 .lav{color:var(--primary)}
 /* ============ roster ============ */
 .tier-label{margin-bottom:20px;display:flex;align-items:center;gap:12px}
 .tier-label span:first-child{font-family:var(--font-mono);font-size:12px;text-transform:uppercase;letter-spacing:3px;color:var(--accent)}
-.tier-label .rule{height:1px;flex:1;background:rgba(255, 255, 255, 0.6)}
+.tier-label .rule{height:1px;flex:1;background:var(--border)}
 .tier-label.mt{margin-top:56px}
 .cap-grid{display:grid;gap:20px}
 .core-grid{display:grid;gap:20px}
@@ -269,7 +269,7 @@ h2 .lav{color:var(--primary)}
 .skills{margin-top:16px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
 .skills span{border:1px solid oklch(0.52 0.24 285/0.6);background:oklch(0.52 0.24 285/0.1);padding:2px 8px;
   font-family:var(--font-mono);font-size:10.5px;color:var(--primary);transition:border-color .2s}
-.group:hover .skills span{border-color:var(--primaryoreground)}
+.group:hover .skills span{border-color:var(--primary)}
 .socials{margin-top:16px;display:flex;justify-content:center;gap:12px;border-top:1px solid var(--border);padding-top:14px}
 .socials a{display:flex;width:32px;height:32px;align-items:center;justify-content:center;
   border:1px solid oklch(0.52 0.24 285/0.6);color:var(--primary);transition:all .2s}
@@ -310,3 +310,11 @@ footer .lav{color:var(--primary)}
   .reveal{opacity:1;transform:none}
 }
 
+
+/* ============ theme-dependent logos ============ */
+.lg-light{display:none}
+:root[data-theme="light"] .lg-dark{display:none}
+:root[data-theme="light"] .lg-light{display:block}
+/* softer glow on the light logo (white glow looks wrong on light bg) */
+:root[data-theme="light"] .wordmark-hero{filter:drop-shadow(0 0 22px rgba(104,64,244,.18))}
+:root[data-theme="light"] .wordmark-nav{filter:drop-shadow(0 0 8px rgba(104,64,244,.25))}
