@@ -21,14 +21,15 @@
 <meta name="theme-color" content="#f7f5fc" media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/png" href="./favicon.png">
 <script>
-  // Apply theme before first paint to avoid flash of wrong theme.
+// Apply theme before first paint to avoid flash of wrong theme.
   (function(){
     var theme = 'dark';
     try {
       var saved = localStorage.getItem('theme');
       var sysLight = window.matchMedia('(prefers-color-scheme: light)').matches;
       theme = saved || (sysLight ? 'light' : 'dark');
-    } catch { /* storage or matchMedia unavailable — fall back to dark */ }
+    } 
+    catch {}
     document.documentElement.dataset.theme = theme;
   })();
 </script>

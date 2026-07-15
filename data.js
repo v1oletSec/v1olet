@@ -70,12 +70,12 @@ export const roster =
     "role": "Core Member",
     "tier": "core",
     "specialty": "OSINT",
-    "quote": "",
+    "quote": "1 larping minion against the world",
     "description": "Core member. OSINT specialist with highly effective team-working skills.",
     "skills": [
       "osint"
     ],
-    "avatar": "https://cdn.discordapp.com/avatars/978402387125497916/a_39b502d40d302aff8b6a3e53237516eb.gif?size=4096",
+    "avatar": "https://avatars.githubusercontent.com/u/187352447?v=4",
     "links": {
       "github": "https://github.com/justina1387/",
       "website": "https://overtsleeping.com/"
