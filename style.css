@@ -237,7 +237,7 @@ h2 .lav{color:var(--primary)}
 .cap-card{position:relative;overflow:hidden;border:1px solid oklch(0.52 0.24 285/0.4);
   background:linear-gradient(to bottom,var(--panel-2),var(--panel));padding:28px;transition:all .3s}
 .cap-card:hover{transform:translateY(-8px);border-color:var(--primary);box-shadow:0 0 40px oklch(0.52 0.24 285/0.3)}
-.cap-card .role-tag{position:absolute;right:0;top:0;background:var(--accent);padding:4px 12px;
+.cap-card .role-tag,.core-card .role-tag{position:absolute;right:0;top:0;background:var(--accent);padding:4px 12px;
   font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--background)}
 .cap-card .head{display:flex;align-items:center;gap:16px}
 .cap-card .av-wrap{position:relative;flex-shrink:0}

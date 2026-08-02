@@ -26,7 +26,7 @@ document.getElementById('events-list').innerHTML = events.map(e => `
     <div class="rank">${esc(e.rank)}</div>
     <div class="info">
       <a href="${esc(e.url)}" target="_blank" rel="noopener noreferrer">${esc(e.name)}</a>
-      <div class="meta">${esc(e.date)}${e.teams ? ' · ' + esc(e.teams) : ''} · captained by ${esc(e.captain)}</div>
+      <div class="meta">${esc(e.date)}${e.teams ? ' · ' + esc(e.teams) : ''}${e.captain ? ' · captained by ' + esc(e.captain) : ''}</div>
     </div>
     ${e.badge ? `<span class="tag">${esc(e.badge)}</span>` : ''}
     ${e.top ? `<span class="tag fill">TOP RUN</span>` : ''}
@@ -52,6 +52,7 @@ const socialsHtml = m => {
 
 const captains = roster.filter(m => m.tier === 'captain');
 const core = roster.filter(m => m.tier === 'core');
+const members = roster.filter(m => m.tier === 'member');
 
 document.getElementById('captains-grid').innerHTML = captains.map((m, i) => `
   <div class="reveal" style="transition-delay:${i * 90}ms">
@@ -72,10 +73,11 @@ document.getElementById('captains-grid').innerHTML = captains.map((m, i) => `
     </div>
   </div>`).join('');
 
-document.getElementById('core-grid').innerHTML = core.map((m, i) => `
+const compactCard = (m, i) => `
   <div class="reveal" style="transition-delay:${i * 90}ms">
     <div class="core-card group">
       <span class="card-sheen" style="position:absolute;inset:0;z-index:10" aria-hidden="true"></span>
+      ${m.roleTag ? `<span class="role-tag">${esc(m.roleTag)}</span>` : ''}
       <div class="av-holder">${avatarHtml(m)}</div>
       <h3>${esc(m.name)}</h3>
       <div class="spec">${esc(m.specialty)}</div>
@@ -83,7 +85,10 @@ document.getElementById('core-grid').innerHTML = core.map((m, i) => `
       ${skillsHtml(m)}
       ${socialsHtml(m)}
     </div>
-  </div>`).join('');
+  </div>`;
+
+document.getElementById('core-grid').innerHTML = core.map(compactCard).join('');
+document.getElementById('members-grid').innerHTML = members.map(compactCard).join('');
 
 /* ---- reveal on scroll ---- */
 const io = new IntersectionObserver(es => {
