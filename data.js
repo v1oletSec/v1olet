@@ -494,8 +494,8 @@ export const roster =
 
 export const events = 
 [
-  {"name":"HTB Cyber Apocalypse 2026","url":"https://ctf.hackthebox.com/event/details/cyber-apocalypse-ctf-2026-the-salt-crown-3432","date":"24–29 Jul 2026","rank":"28th","top":true},
-  {"name":"OmniCTF 2026 Qualifier","url":"https://ctftime.org/event/3104/","date":"17–19 Jul 2026","rank":"4th","top":true,"badge":"AVERAGE PLACE"},
+  {"name":"HTB Cyber Apocalypse 2026","url":"https://ctf.hackthebox.com/event/details/cyber-apocalypse-ctf-2026-the-salt-crown-3432","date":"24–29 Jul 2026","teams":"7000+ teams","rank":"28th","top":true},
+  {"name":"OmniCTF 2026 Qualifier","url":"https://ctftime.org/event/3104/","date":"17–19 Jul 2026","teams":"1k+ teams","rank":"4th","top":true,"badge":"AVERAGE PLACE"},
   {"name":"BroncoCTF","url":"https://broncoctf.ctfd.io/teams/378","date":"11 Jul 2026","teams":"731 teams","captain":"existin","rank":"3rd","top":true},
   {"name":"Operation Heist CTF 2026","url":"https://ctftime.org/event/3327","date":"13–14 Jun 2026","captain":"e1","rank":"17th","top":true},
   {"name":"THEM?!CTF 2026","url":"https://ctftime.org/event/3209","date":"29–31 May 2026","teams":"920 teams","captain":"0xPrime","rank":"28th","top":true},

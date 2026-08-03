@@ -3,199 +3,252 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>v1olet - Offensive Security Research Team</title>
-<meta name="description" content="v1olet - independent offensive security research team. Penetration testing, vulnerability research, red team operations. International CTF competitors.">
+<title>v1olet — Offensive Security Research</title>
+<meta name="description" content="v1olet is an independent offensive security team. Penetration testing, red team operations, and vulnerability research, with a public competition record.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://v1olet.xyz/">
 <meta property="og:site_name" content="v1olet">
-<meta property="og:title" content="v1olet - Offensive Security Research Team">
-<meta property="og:description" content="Independent offensive security research team. Pentesting, red team ops, vulnerability research - international CTF competitors.">
+<meta property="og:title" content="v1olet — Offensive Security Research">
+<meta property="og:description" content="Penetration testing, red team operations, and vulnerability research. Independent team, public competition record.">
 <meta property="og:image" content="https://v1olet.xyz/v1olet-not-sus-at-all.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="v1olet - Offensive Security Research Team">
-<meta name="twitter:description" content="Independent offensive security research team and international CTF competitors.">
+<meta name="twitter:title" content="v1olet — Offensive Security Research">
+<meta name="twitter:description" content="Penetration testing, red team operations, and vulnerability research.">
 <meta name="twitter:image" content="https://v1olet.xyz/v1olet-not-sus-at-all.png">
-<meta name="theme-color" content="#0a0e1a" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#f7f5fc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14101E" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FAF9FC" media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/png" href="./favicon.png">
 <script>
-// Apply theme before first paint to avoid flash of wrong theme.
+// Apply theme before first paint to avoid a flash of the wrong theme.
   (function(){
     var theme = 'dark';
     try {
       var saved = localStorage.getItem('theme');
       var sysLight = window.matchMedia('(prefers-color-scheme: light)').matches;
       theme = saved || (sysLight ? 'light' : 'dark');
-    } 
+    }
     catch {}
     document.documentElement.dataset.theme = theme;
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./style.css">
 <!-- v1{r34d_th3_s0urc3_n0w_4pply} -->
 </head>
 <body>
 
-<!-- GridBg: scrolling grid + glows + flower rain -->
-<div class="grid-bg" aria-hidden="true">
-  <div class="grid"></div>
-  <div class="glow-drift"></div>
-</div>
-<div class="page-bg" aria-hidden="true">
-  <div class="glow-top"></div>
-  <canvas id="flower-rain"></canvas>
-</div>
+<a class="skip" href="#main">Skip to content</a>
+<div id="progress" aria-hidden="true"></div>
 
-<div class="z10">
-
-<!-- ScrollUI -->
-<div id="progress"></div>
-<button id="totop" type="button" aria-label="Back to top">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
-</button>
-
-<!-- SiteNav -->
-<nav>
-  <a href="#top" class="brand">
-    <img class="wordmark-nav lg-dark" src="./wordmark-nav-dark.png" alt="v1olet">
-    <img class="wordmark-nav lg-light" src="./wordmark-nav-light.png" alt="v1olet">
-  </a>
-  <div class="links">
-    <a href="#about">about</a><a href="#services">services</a><a href="#events">events</a>
-    <a href="#roster">roster</a><a href="#contact">contact</a>
+<header class="topbar" id="topbar">
+  <div class="topbar-in">
+    <a href="#top" class="brand" aria-label="v1olet, back to top">
+      <img class="wordmark lg-dark" src="./wordmark-nav-dark.png" alt="v1olet">
+      <img class="wordmark lg-light" src="./wordmark-nav-light.png" alt="v1olet">
+    </a>
+    <nav class="topnav" aria-label="Sections">
+      <a href="#practice">Practice</a>
+      <a href="#services">Capabilities</a>
+      <a href="#events">Record</a>
+      <a href="#roster">Operators</a>
+    </nav>
+    <div class="topbar-end">
+      <button id="theme-toggle" type="button" class="icon-btn" aria-label="Switch colour theme" title="Switch colour theme">
+        <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M4.4 4.4l1.6 1.6M18 18l1.6 1.6M2.4 12h2.2M19.4 12h2.2M4.4 19.6 6 18M18 6l1.6-1.6"/></svg>
+        <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 13.2A8.6 8.6 0 1 1 10.8 3.5a6.8 6.8 0 0 0 9.7 9.7z"/></svg>
+      </button>
+      <a class="btn btn-solid btn-sm" href="mailto:hello@v1olet.xyz">Request an engagement</a>
+    </div>
   </div>
-  <button id="theme-toggle" type="button" class="theme-toggle" aria-label="Toggle color theme" title="Toggle color theme">
-    <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-    <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-  </button>
-  <a class="apply" href="https://forms.gle/sRLQVVkSxt32uKhk8" target="_blank" rel="noopener noreferrer">apply →</a>
-</nav>
-
-<!-- Hero -->
-<header id="top" class="hero">
-  
-  <h1>
-    <img class="wordmark-hero lg-dark" src="./wordmark-hero-dark.png" alt="v1olet security">
-    <img class="wordmark-hero lg-light" src="./wordmark-hero-light.png" alt="v1olet security">
-  </h1>
-  <div class="term">
-    <span class="prompt">root@v1olet:~$</span> <span id="typed"></span><span class="cursor"></span>
-  </div>
-  <div class="ctas">
-    <a href="#events" class="cta-primary btn-shine">see results</a>
-    <a href="#roster" class="cta-outline">meet the team</a>
-    <a href="https://forms.gle/sRLQVVkSxt32uKhk8" target="_blank" rel="noopener noreferrer" class="cta-accent">join v1olet</a>
-  </div>
-  <div class="scroll-hint">▼ SCROLL ▼</div>
 </header>
 
-<!-- About -->
-<section id="about">
-  <div class="reveal">
-    <div class="sec-tag">root@v1olet:~$ whoami -v</div>
-    <h2>about <span class="lav">v1olet</span></h2>
-    <div class="about-grid">
-      <div class="about-text">
-        <p>Independent offensive security research team specialising in penetration testing, vulnerability research, and red team operations.</p>
-        <p>Active CTF competitors under team tag <strong>v1olet</strong> - regularly placing in international competitions against fields of 500–1300+ teams.</p>
+<main id="main">
+
+<!-- ============ Hero ============ -->
+<section class="hero" id="top">
+  <div class="shell hero-grid">
+    <div class="hero-lead">
+      <p class="eyebrow load" style="--d:0ms">Independent offensive security research</p>
+      <h1 class="load" style="--d:70ms">Offensive security,<br>proven on the<br><em>scoreboard.</em></h1>
+      <p class="lede load" style="--d:150ms">
+        We run penetration tests, red team operations, and vulnerability research.
+        Then we go and place against everyone else in public, and publish where we landed.
+      </p>
+      <div class="hero-actions load" style="--d:220ms">
+        <a class="btn btn-solid" href="mailto:hello@v1olet.xyz">Request an engagement</a>
+        <a class="btn btn-ghost" href="#events">See the record</a>
       </div>
-      <div class="stats">
-        <div class="stat"><div class="n"><span data-count="11" data-prefix=""></span></div><div class="l">COMPETITIONS · 2026</div></div>
-        <div class="stat"><div class="n"><span data-count="3" data-prefix="#"></span></div><div class="l">BEST PLACEMENT · BRONCOCTF</div></div>
-        <div class="stat"><div class="n"><span data-count="1351" data-prefix=""></span></div><div class="l">LARGEST FIELD FACED</div></div>
+    </div>
+
+    <aside class="scope load" style="--d:300ms" aria-label="Engagement profile">
+      <div class="scope-head">
+        <svg class="petal" viewBox="0 0 48 48" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="1.1">
+            <ellipse cx="24" cy="14.4" rx="5.4" ry="9.6"/>
+            <ellipse cx="24" cy="14.4" rx="5.4" ry="9.6" transform="rotate(60 24 24)"/>
+            <ellipse cx="24" cy="14.4" rx="5.4" ry="9.6" transform="rotate(120 24 24)"/>
+            <ellipse cx="24" cy="14.4" rx="5.4" ry="9.6" transform="rotate(180 24 24)"/>
+            <ellipse cx="24" cy="14.4" rx="5.4" ry="9.6" transform="rotate(240 24 24)"/>
+            <ellipse cx="24" cy="14.4" rx="5.4" ry="9.6" transform="rotate(300 24 24)"/>
+          </g>
+          <circle cx="24" cy="24" r="3.1" fill="currentColor"/>
+        </svg>
+        <span>Engagement profile</span>
+      </div>
+      <dl class="scope-list">
+        <div><dt>Disciplines</dt><dd>web · pwn · rev · crypto · forensics · osint · cloud</dd></div>
+        <div><dt>Operators</dt><dd><span id="op-count">30</span> across four time zones</dd></div>
+        <div><dt>Best finish</dt><dd>3rd of 731 — BroncoCTF</dd></div>
+        <div><dt>Largest field</dt><dd>7,000+ teams — Cyber Apocalypse</dd></div>
+        <div><dt>Enquiries</dt><dd><a href="mailto:hello@v1olet.xyz">hello@v1olet.xyz</a></dd></div>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ Practice ============ -->
+<section id="practice" class="band">
+  <div class="shell">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Practice</p>
+      <h2>A small team that stays in the tooling.</h2>
+    </div>
+    <div class="practice-grid">
+      <div class="reveal">
+        <p class="prose">
+          v1olet is an independent offensive security team. We assess web applications,
+          APIs, and infrastructure, simulate adversaries against live detection, and take
+          software apart to find the bug classes automated tooling never reaches.
+        </p>
+        <p class="prose">
+          The same operators who run client engagements compete year-round under the
+          <strong>v1olet</strong> tag, against fields of five hundred to seven thousand teams.
+          It keeps the practice sharp, and it means our record is a matter of public record
+          rather than a case study we wrote about ourselves.
+        </p>
+      </div>
+      <div class="reveal disciplines" aria-label="Disciplines covered">
+        <p class="eyebrow">Coverage</p>
+        <ul id="discipline-list"></ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Services -->
+<!-- ============ Capabilities ============ -->
 <section id="services">
-  <div class="reveal">
-    <div class="sec-tag">root@v1olet:~$ cat services.txt</div>
-    <h2>what we <span class="lav">do</span></h2>
-    <div class="svc-grid">
-      <div class="svc group"><span class="topline"></span><div class="ic">&gt;_</div><h3>Penetration Testing</h3><p>Web, API and infrastructure assessments with actionable, developer-ready reporting.</p></div>
-      <div class="svc group"><span class="topline"></span><div class="ic">[!]</div><h3>Red Team Operations</h3><p>Adversary simulation that tests detection and response, not just perimeter defences.</p></div>
-      <div class="svc group"><span class="topline"></span><div class="ic">{0}</div><h3>Vulnerability Research</h3><p>Deep-dive research into software and protocols to find what scanners never will.</p></div>
-      <div class="svc group"><span class="topline"></span><div class="ic">≡≡</div><h3>Training &amp; Workshops</h3><p>Hands-on security training built from real engagements and CTF experience.</p></div>
-      <div class="svc group"><span class="topline"></span><div class="ic">∞</div><h3>PTaaS Engagements</h3><p>Continuous penetration testing as a service - ongoing coverage, not annual snapshots.</p></div>
+  <div class="shell">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Capabilities</p>
+      <h2>What an engagement gets you.</h2>
+    </div>
+    <div class="caps">
+      <article class="cap reveal">
+        <h3>Penetration testing</h3>
+        <p class="prose">Web, API, and infrastructure assessments. Every finding arrives reproducible, with a working proof of concept and remediation your developers can act on.</p>
+        <span class="cap-out">Findings report</span>
+      </article>
+      <article class="cap reveal">
+        <h3>Red team operations</h3>
+        <p class="prose">Adversary simulation that measures whether you detect and respond, not just whether the perimeter holds on the day.</p>
+        <span class="cap-out">Attack narrative · detection gaps</span>
+      </article>
+      <article class="cap reveal">
+        <h3>Vulnerability research</h3>
+        <p class="prose">Deep review of software and protocols, down to the primitives, to surface the bug classes a scanner has no way to model.</p>
+        <span class="cap-out">Advisory · coordinated disclosure</span>
+      </article>
+      <article class="cap reveal">
+        <h3>Continuous testing</h3>
+        <p class="prose">Testing that runs alongside your release cycle rather than once a year, so findings land while the code is still fresh.</p>
+        <span class="cap-out">Rolling findings queue</span>
+      </article>
+      <article class="cap reveal">
+        <h3>Training and workshops</h3>
+        <p class="prose">Hands-on sessions built from real engagements and competition work, run for engineering and security teams.</p>
+        <span class="cap-out">Live lab · exercise set</span>
+      </article>
     </div>
   </div>
 </section>
 
-<!-- Events -->
-<section id="events">
-  <div class="reveal">
-    <div class="sec-tag">root@v1olet:~$ cat scoreboard</div>
-    <h2>competition <span class="lav">log</span></h2>
-    <div class="timeline" id="events-list"></div>
+<!-- ============ The record (signature) ============ -->
+<section id="events" class="record">
+  <div class="shell">
+    <div class="sec-head reveal">
+      <p class="eyebrow">The record</p>
+      <h2>Where we placed, in public.</h2>
+    </div>
+
+    <div class="figures reveal">
+      <div class="figure"><span class="fig-n" data-count="11"></span><span class="fig-l">Competitions in 2026</span></div>
+      <div class="figure"><span class="fig-n" data-count="3" data-prefix="#"></span><span class="fig-l">Best placement · BroncoCTF</span></div>
+      <div class="figure"><span class="fig-n" data-count="7000" data-suffix="+"></span><span class="fig-l">Largest field faced</span></div>
+    </div>
+
+    <ol class="ledger" id="events-list"></ol>
+    <p class="ledger-note reveal">Placements as published by the organisers. Team profile on <a href="https://ctftime.org/team/442036" target="_blank" rel="noopener noreferrer">CTFtime</a>.</p>
   </div>
 </section>
 
-<!-- Roster -->
+<!-- ============ Operators ============ -->
 <section id="roster">
-  <div class="reveal">
-    <div class="sec-tag">root@v1olet:~$ ls core_roster/ </div>
-    <h2>the <span class="lav">operators</span></h2>
+  <div class="shell">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Operators</p>
+      <h2>The people on the engagement.</h2>
+    </div>
+
+    <div class="tier reveal"><span>Leadership</span><span class="rule"></span><span class="tier-n" id="n-captain"></span></div>
+    <div class="op-grid lead-grid" id="captains-grid"></div>
+
+    <div class="tier reveal"><span>Core members</span><span class="rule"></span><span class="tier-n" id="n-core"></span></div>
+    <div class="op-grid" id="core-grid"></div>
+
+    <div class="tier reveal"><span>Team members</span><span class="rule"></span><span class="tier-n" id="n-member"></span></div>
+    <div class="op-grid" id="members-grid"></div>
   </div>
-  <div class="reveal" style="transition-delay:80ms">
-    <div class="tier-label"><span>team_captains</span><span class="rule"></span></div>
-  </div>
-  <div class="cap-grid" id="captains-grid"></div>
-  <div class="reveal" style="transition-delay:80ms">
-    <div class="tier-label mt"><span>core_members</span><span class="rule"></span></div>
-  </div>
-  <div class="core-grid" id="core-grid"></div>
-  <div class="reveal" style="transition-delay:80ms">
-    <div class="tier-label mt"><span>team_members</span><span class="rule"></span></div>
-  </div>
-  <div class="core-grid" id="members-grid"></div>
 </section>
 
-<!-- Contact -->
-<section id="contact">
-  <div class="reveal">
-    <div class="sec-tag">root@v1olet:~$ echo reach out</div>
-    <h2>contact <span class="lav">&amp; join</span></h2>
-    <div class="contact-grid">
+<!-- ============ Contact ============ -->
+<section id="contact" class="band">
+  <div class="shell contact-grid">
+    <div class="reveal">
+      <p class="eyebrow">Engagements</p>
+      <h2>Start with the scope.</h2>
+      <p class="prose">Tell us what you are shipping and what you are worried about. We will come back with an approach, a timeline, and what the deliverable looks like.</p>
       <div class="channels">
-        <h3>&gt; channels</h3>
-        <div class="list">
-          <a href="mailto:hello@v1olet.xyz"><span class="arw">→</span> hello@v1olet.xyz</a>
-          <a href="https://www.linkedin.com/company/v1olet/" target="_blank" rel="noopener noreferrer"><span class="arw">→</span> LinkedIn</a>
-          <a href="https://ctftime.org/team/442036" target="_blank" rel="noopener noreferrer"><span class="arw">→</span> CTFtime</a>
-          <a href="https://github.com/v1oletSec/writeups" target="_blank" rel="noopener noreferrer"><span class="arw">→</span> CTF Writeups</a>
-        </div>
-      </div>
-      <div class="join">
-        <h3>join the team_</h3>
-        <p>We're looking for players who love breaking things. Pwn, rev, web, crypto, forensics - if you grind CTFs and want a team that competes internationally, apply.</p>
-        <a href="https://forms.gle/sRLQVVkSxt32uKhk8" target="_blank" rel="noopener noreferrer">apply to v1olet →</a>
+        <a href="mailto:hello@v1olet.xyz"><span>Email</span> hello@v1olet.xyz</a>
+        <a href="https://www.linkedin.com/company/v1olet/" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span> /company/v1olet</a>
+        <a href="https://ctftime.org/team/442036" target="_blank" rel="noopener noreferrer"><span>CTFtime</span> Team 442036</a>
+        <a href="https://github.com/v1oletSec/writeups" target="_blank" rel="noopener noreferrer"><span>Writeups</span> v1oletSec/writeups</a>
       </div>
     </div>
+    <aside class="join reveal">
+      <p class="eyebrow">Join</p>
+      <h3>We are still recruiting operators.</h3>
+      <p class="prose">If you compete seriously in pwn, rev, web, crypto, or forensics and want a team that plays internationally, send us your record.</p>
+      <a class="btn btn-solid" href="https://forms.gle/sRLQVVkSxt32uKhk8" target="_blank" rel="noopener noreferrer">Apply to v1olet</a>
+    </aside>
   </div>
 </section>
 
-<footer>© 2026 <span class="lav">v1olet</span> - offensive security research team site · built by the team, for the team</footer>
+</main>
 
-</div>
+<footer>
+  <div class="shell foot-in">
+    <span>© 2026 v1olet — offensive security research</span>
+    <span class="foot-dim">Built by the team, for the team</span>
+  </div>
+</footer>
 
-<!-- ================================================================
-     ROSTER DATA - edit this JSON to manage member cards.
-     tier: "captain" (big card, top row) or "core" (compact card).
-     avatar: image URL, or "" for auto initials avatar.
-     quote / stats / links are optional.
-     links supports: "linkedin", "github", "website".
-================================================================= -->
-
-
-<!-- EVENTS DATA - edit to add new competitions (newest first). -->
-
+<button id="totop" type="button" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 13 6-6 6 6"/></svg>
+</button>
 
 <script type="module" src="./main.js"></script>
 </body>
