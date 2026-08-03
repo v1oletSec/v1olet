@@ -17,7 +17,7 @@
 <meta name="twitter:title" content="v1olet — Offensive Security">
 <meta name="twitter:description" content="Penetration testing, red team operations, and vulnerability research.">
 <meta name="twitter:image" content="https://v1olet.xyz/v1olet-not-sus-at-all.png">
-<meta name="theme-color" content="#0A0A12" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#08080A" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/png" href="./favicon.png">
 <script>
@@ -33,14 +33,13 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter+Tight:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter+Tight:wght@400;500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./style.css">
 <!-- v1{r34d_th3_s0urc3_n0w_4pply} -->
 </head>
 <body>
 
 <a class="skip" href="#main">Skip to content</a>
-<div id="progress" aria-hidden="true"></div>
 
 <!-- ===================== announcement ===================== -->
 <div class="announce">
@@ -79,8 +78,8 @@
     </div>
   </div>
 
-  <!-- Collapsed on small screens; the only navigation path there, so it also
-       carries the contact route rather than just the section links. -->
+  <!-- Collapsed below 900px, where it is the only navigation available, so it
+       carries the contact route as well as the section links. -->
   <div class="mobile-nav" id="mobile-nav" hidden>
     <div class="shell mobile-nav-in">
       <a href="#capabilities">Capabilities</a>
@@ -97,28 +96,28 @@
 
 <!-- ===================== hero ===================== -->
 <section class="hero" id="top">
+  <canvas id="bg" aria-hidden="true"></canvas>
   <div class="shell hero-grid">
     <div class="hero-copy">
-      <p class="eyebrow load" style="--d:0ms">Offensive security</p>
-      <h1 class="load" style="--d:60ms">Find the flaw before an attacker charges you for it.</h1>
-      <p class="lede load" style="--d:130ms">
+      <div class="hero-logo" data-tilt>
+        <img class="lg-dark" src="./wordmark-hero-dark.png" alt="v1olet" width="1100" height="531">
+        <img class="lg-light" src="./wordmark-hero-light.png" alt="v1olet" width="1100" height="531">
+      </div>
+      <p class="eyebrow reveal">Offensive security</p>
+      <h1 class="reveal">Find the flaw before an attacker charges you for it.</h1>
+      <p class="lede reveal">
         v1olet runs penetration tests, red team operations, and vulnerability research for teams
         that ship fast. Every finding comes reproducible, with a working proof of concept and a
         retest once you have fixed it.
       </p>
-      <div class="hero-actions load" style="--d:200ms">
+      <div class="hero-actions reveal">
         <a class="btn btn-solid btn-lg" href="mailto:hello@v1olet.xyz?subject=Engagement%20enquiry">Request an engagement</a>
         <a class="btn btn-outline btn-lg" href="#capabilities">Explore capabilities</a>
       </div>
-      <ul class="hero-assur load" style="--d:260ms">
-        <li>Retest included</li>
-        <li>Named operators, no subcontracting</li>
-        <li>Findings as you go, not at the end</li>
-      </ul>
     </div>
 
     <!-- product-style artefact: what the client actually receives -->
-    <div class="deliverable load" style="--d:340ms" aria-label="Example of a findings report">
+    <div class="deliverable reveal" data-tilt aria-label="Example of a findings report">
       <div class="dl-chrome">
         <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
         <span class="dl-file">engagement-report.pdf</span>
@@ -146,6 +145,12 @@
       </ul>
       <div class="dl-foot"><span>3 of 17 findings</span><span>Each with PoC and fix guidance</span></div>
     </div>
+
+    <ul class="hero-assur reveal">
+      <li>Retest included</li>
+      <li>Named operators, no subcontracting</li>
+      <li>Findings as you go, not at the end</li>
+    </ul>
   </div>
 </section>
 
@@ -247,7 +252,7 @@
 <!-- ===================== cta ===================== -->
 <section class="cta" id="contact">
   <div class="shell cta-in">
-    <div class="reveal">
+    <div>
       <h2>Tell us what you are shipping.</h2>
       <p class="prose">Send the stack, the deadline, and what worries you. We come back with an approach, a timeline, and a fixed price, usually within two working days.</p>
       <div class="cta-actions">
@@ -310,5 +315,6 @@
 </button>
 
 <script type="module" src="./main.js"></script>
+<script type="module" src="./scene.js"></script>
 </body>
 </html>

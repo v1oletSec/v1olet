@@ -2,7 +2,6 @@ import { roster, events } from './data.js';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = id => document.getElementById(id);
 
 /* ------------------------------------------------------------ capabilities */
@@ -64,10 +63,10 @@ const splitRank = r => {
 const metaLine = e => [e.date, e.teams, e.captain ? `captained by ${e.captain}` : '']
   .filter(Boolean).map(esc).join('  ·  ');
 
-$('events-list').innerHTML = events.map((e, i) => {
+$('events-list').innerHTML = events.map(e => {
   const podium = /^[1-3](st|nd|rd)$/i.test(String(e.rank ?? ''));
   return `
-  <li class="row reveal${podium ? ' podium' : ''}" style="animation-delay:${Math.min(i, 6) * 55}ms">
+  <li class="row reveal${podium ? ' podium' : ''}">
     <div class="rk">${splitRank(e.rank)}</div>
     <div>
       <a class="ev-name" href="${esc(e.url)}" target="_blank" rel="noopener noreferrer">${esc(e.name)}</a>
@@ -100,32 +99,30 @@ const socialsHtml = m => {
   return items ? `<div class="socials">${items}</div>` : '';
 };
 
-/* Three tiers render three different shapes. Leadership and core are cards
-   (avatar beside the name, quote below); members are compact rows, which is
-   what stops thirty near-identical boxes reading as a card carpet.
-   Every optional field is emitted only when present, so a member without a
-   quote or links simply produces a shorter card rather than an empty slot. */
-const card = variant => (m, i) => {
+/* Three tiers render three shapes. Leadership and core are panels (portrait
+   beside the name, quote below); members are dense rows. Every optional field
+   is emitted only when present, so a member without a quote or links produces
+   a shorter panel rather than an empty slot. No animation-delay: nothing on
+   this page animates in. */
+const card = variant => m => {
   // Leadership shows its role; the other tiers only show a tag if one is set.
   const tag = variant === 'lead' ? m.role : m.roleTag;
   const tagHtml = tag ? `<span class="op-tag">${esc(tag)}</span>` : '';
-  const delay = `style="animation-delay:${Math.min(i, 7) * 60}ms"`;
 
   if (variant === 'member') {
     return `
-  <article class="op member reveal" ${delay}>
+  <article class="op member reveal">
     ${avatarHtml(m)}
     <div class="op-body">
       <h3 class="op-name">${esc(m.name)}${tagHtml}</h3>
       <div class="op-spec">${esc(m.specialty)}</div>
     </div>
-    ${skillsHtml(m)}
     ${socialsHtml(m)}
   </article>`;
   }
 
   return `
-  <article class="op ${variant} reveal" ${delay}>
+  <article class="op ${variant} reveal">
     <div class="op-head">
       ${avatarHtml(m)}
       <div class="op-id">
@@ -152,54 +149,74 @@ for (const [tier, cfg] of Object.entries(TIERS)) {
   $(cfg.count).textContent = String(group.length).padStart(2, '0');
 }
 
-/* ----------------------------------------------------------------- reveal --*/
-const io = new IntersectionObserver(entries => {
+/* ------------------------------------------------------------------ motion --
+   One shared observer drives the reveals; a second counts the figures up when
+   they first come into view. Both honour prefers-reduced-motion by writing
+   the final state immediately instead of animating to it. */
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const revealIO = new IntersectionObserver((entries, obs) => {
   for (const e of entries) {
     if (!e.isIntersecting) continue;
-    io.unobserve(e.target);
+    obs.unobserve(e.target);
     e.target.classList.add('on');
   }
-}, { threshold: .1, rootMargin: '0px 0px -5% 0px' });
+}, { threshold: .12, rootMargin: '0px 0px -8% 0px' });
 
-if (reduced) document.querySelectorAll('.reveal').forEach(el => el.classList.add('on'));
-else document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+const bindReveals = () => document.querySelectorAll('.reveal:not(.on)').forEach(el => {
+  if (reduced) el.classList.add('on');
+  else revealIO.observe(el);
+});
 
-/* --------------------------------------------------------------- counters --*/
-const cio = new IntersectionObserver(entries => {
+const fmtCount = el => (el.dataset.prefix || '')
+  + Number(el.dataset.count).toLocaleString('en-US') + (el.dataset.suffix || '');
+
+const countIO = new IntersectionObserver((entries, obs) => {
   for (const e of entries) {
     if (!e.isIntersecting) continue;
-    cio.unobserve(e.target);
-    const el = e.target;
-    const end = Number(el.dataset.count);
-    const pre = el.dataset.prefix || '';
-    const suf = el.dataset.suffix || '';
-    const fmt = n => pre + n.toLocaleString('en-US') + suf;
-    if (reduced) { el.textContent = fmt(end); continue; }
-    const t0 = performance.now();
+    obs.unobserve(e.target);
+    const el = e.target, end = Number(el.dataset.count), t0 = performance.now();
     (function step(t) {
-      const p = Math.min((t - t0) / 1250, 1);
-      el.textContent = fmt(Math.round(end * (1 - Math.pow(1 - p, 3))));
+      const p = Math.min((t - t0) / 1400, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = (el.dataset.prefix || '')
+        + Math.round(end * eased).toLocaleString('en-US') + (el.dataset.suffix || '');
       if (p < 1) requestAnimationFrame(step);
     })(t0);
   }
 }, { threshold: .6 });
 
 document.querySelectorAll('[data-count]').forEach(el => {
+  if (reduced) { el.textContent = fmtCount(el); return; }
   el.textContent = (el.dataset.prefix || '') + '0';
-  cio.observe(el);
+  countIO.observe(el);
 });
 
+/* Pointer-driven tilt. Small angles on purpose — past about 6deg it stops
+   reading as depth and starts reading as a toy. */
+if (!reduced && matchMedia('(pointer:fine)').matches) {
+  for (const el of document.querySelectorAll('[data-tilt]')) {
+    el.addEventListener('pointermove', ev => {
+      const r = el.getBoundingClientRect();
+      el.classList.add('tilting');
+      el.style.setProperty('--rx', `${((ev.clientX - r.left) / r.width - .5) * 6}deg`);
+      el.style.setProperty('--ry', `${(.5 - (ev.clientY - r.top) / r.height) * 6}deg`);
+    });
+    el.addEventListener('pointerleave', () => {
+      el.classList.remove('tilting');
+      el.style.setProperty('--rx', '0deg');
+      el.style.setProperty('--ry', '0deg');
+    });
+  }
+}
+
 /* -------------------------------------------------------------- scroll UI --*/
-const prog = $('progress'), totop = $('totop'), topbar = $('topbar');
-const onScroll = () => {
-  const h = document.documentElement;
-  prog.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight || 1) * 100) + '%';
-  totop.classList.toggle('show', h.scrollTop > 700);
-  topbar.classList.toggle('stuck', h.scrollTop > 4);
-};
+const totop = $('totop');
+const onScroll = () => totop.classList.toggle('show', document.documentElement.scrollTop > 700);
 onScroll();
 addEventListener('scroll', onScroll, { passive: true });
-totop.addEventListener('click', () => scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }));
+// Instant jump, never smooth — the page does not animate.
+totop.addEventListener('click', () => scrollTo({ top: 0, behavior: 'auto' }));
 
 /* ------------------------------------------------------------------ theme --*/
 (function initTheme() {
@@ -220,9 +237,10 @@ totop.addEventListener('click', () => scrollTo({ top: 0, behavior: reduced ? 'au
 })();
 
 /* ------------------------------------------------------------ mobile nav --
-   Below 820px this is the only navigation, so it has to survive keyboard use:
-   Escape closes and returns focus, and the panel is [hidden] when closed so
-   its links stay out of the tab order. */
+   Below 900px this is the only navigation, so it has to work by keyboard:
+   Escape closes and restores focus, and the panel is [hidden] when closed so
+   its links stay out of the tab order. Opening moves focus into the panel,
+   which otherwise sits after the header controls in the DOM. */
 (function initMobileNav() {
   const btn = $('nav-toggle'), panel = $('mobile-nav');
   if (!btn || !panel) return;
@@ -231,15 +249,10 @@ totop.addEventListener('click', () => scrollTo({ top: 0, behavior: reduced ? 'au
     btn.setAttribute('aria-expanded', String(open));
     btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     panel.hidden = !open;
-    // The panel sits after the header controls in the DOM, so without this a
-    // keyboard user would tab through the theme toggle and CTA before reaching
-    // the menu they just opened.
     if (open && moveFocus) panel.querySelector('a')?.focus();
   };
 
   btn.addEventListener('click', () => setOpen(btn.getAttribute('aria-expanded') !== 'true', true));
-
-  // Jumping to a section should dismiss the panel covering it.
   panel.addEventListener('click', e => { if (e.target.closest('a')) setOpen(false); });
 
   addEventListener('keydown', e => {
@@ -249,8 +262,7 @@ totop.addEventListener('click', () => scrollTo({ top: 0, behavior: reduced ? 'au
     }
   });
 
-  // Leaving the breakpoint with the panel open would otherwise strand it.
-  matchMedia('(min-width:820px)').addEventListener('change', e => { if (e.matches) setOpen(false); });
+  matchMedia('(min-width:900px)').addEventListener('change', e => { if (e.matches) setOpen(false); });
 })();
 
 /* --------------------------------------------------------- nav highlight --*/
@@ -267,3 +279,5 @@ document.querySelectorAll('section[id]').forEach(s => secIO.observe(s));
 console.log('%c v1olet ', 'background:#4C2AC4;color:#fff;font-size:20px;font-weight:700;padding:6px 12px');
 console.log('%cLooking under the hood? We like that.\nflag: v1{r34d_th3_s0urc3_n0w_4pply}\napply -> https://forms.gle/sRLQVVkSxt32uKhk8',
   'color:#8E6BFF;font-family:monospace;font-size:13px');
+
+bindReveals();
