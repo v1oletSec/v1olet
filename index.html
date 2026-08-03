@@ -3,39 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>v1olet — Offensive Security Research</title>
-<meta name="description" content="v1olet is an independent offensive security team. Penetration testing, red team operations, and vulnerability research, with a public competition record.">
+<title>v1olet — Offensive Security</title>
+<meta name="description" content="v1olet is an offensive security team. Penetration testing, red team operations, and vulnerability research, delivered with reproducible findings and free retesting.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://v1olet.xyz/">
 <meta property="og:site_name" content="v1olet">
-<meta property="og:title" content="v1olet — Offensive Security Research">
-<meta property="og:description" content="Penetration testing, red team operations, and vulnerability research. Independent team, public competition record.">
+<meta property="og:title" content="v1olet — Offensive Security">
+<meta property="og:description" content="Penetration testing, red team operations, and vulnerability research. Reproducible findings, free retest, public competition record.">
 <meta property="og:image" content="https://v1olet.xyz/v1olet-not-sus-at-all.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="v1olet — Offensive Security Research">
+<meta name="twitter:title" content="v1olet — Offensive Security">
 <meta name="twitter:description" content="Penetration testing, red team operations, and vulnerability research.">
 <meta name="twitter:image" content="https://v1olet.xyz/v1olet-not-sus-at-all.png">
-<meta name="theme-color" content="#14101E" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#FAF9FC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0A0A12" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/png" href="./favicon.png">
 <script>
-// Apply theme before first paint to avoid a flash of the wrong theme.
   (function(){
     var theme = 'dark';
     try {
       var saved = localStorage.getItem('theme');
       var sysLight = window.matchMedia('(prefers-color-scheme: light)').matches;
       theme = saved || (sysLight ? 'light' : 'dark');
-    }
-    catch {}
+    } catch {}
     document.documentElement.dataset.theme = theme;
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter+Tight:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./style.css">
 <!-- v1{r34d_th3_s0urc3_n0w_4pply} -->
 </head>
@@ -44,144 +42,156 @@
 <a class="skip" href="#main">Skip to content</a>
 <div id="progress" aria-hidden="true"></div>
 
+<!-- ===================== announcement ===================== -->
+<div class="announce">
+  <div class="shell announce-in">
+    <span class="pill">New</span>
+    <p>4th place at the OmniCTF 2026 Qualifier, and 28th of 7,000+ at Cyber Apocalypse.</p>
+    <a href="#record">See the record<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5"/></svg></a>
+  </div>
+</div>
+
+<!-- ===================== nav ===================== -->
 <header class="topbar" id="topbar">
-  <div class="topbar-in">
-    <a href="#top" class="brand" aria-label="v1olet, back to top">
+  <div class="shell topbar-in">
+    <a href="#top" class="brand" aria-label="v1olet — back to top">
       <img class="wordmark lg-dark" src="./wordmark-nav-dark.png" alt="v1olet">
       <img class="wordmark lg-light" src="./wordmark-nav-light.png" alt="v1olet">
     </a>
-    <nav class="topnav" aria-label="Sections">
-      <a href="#practice">Practice</a>
-      <a href="#services">Capabilities</a>
-      <a href="#events">Record</a>
-      <a href="#roster">Operators</a>
+    <nav class="topnav" aria-label="Primary">
+      <a href="#capabilities">Capabilities</a>
+      <a href="#process">How it works</a>
+      <a href="#record">Record</a>
+      <a href="#roster">Team</a>
     </nav>
     <div class="topbar-end">
       <button id="theme-toggle" type="button" class="icon-btn" aria-label="Switch colour theme" title="Switch colour theme">
-        <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M4.4 4.4l1.6 1.6M18 18l1.6 1.6M2.4 12h2.2M19.4 12h2.2M4.4 19.6 6 18M18 6l1.6-1.6"/></svg>
-        <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 13.2A8.6 8.6 0 1 1 10.8 3.5a6.8 6.8 0 0 0 9.7 9.7z"/></svg>
+        <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.1M12 19.3v2.1M4.6 4.6l1.5 1.5M17.9 17.9l1.5 1.5M2.6 12h2.1M19.3 12h2.1M4.6 19.4l1.5-1.5M17.9 6.1l1.5-1.5"/></svg>
+        <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13.2A8.6 8.6 0 1 1 10.8 3.5a6.8 6.8 0 0 0 9.7 9.7z"/></svg>
       </button>
-      <a class="btn btn-solid btn-sm" href="mailto:hello@v1olet.xyz">Request an engagement</a>
+      <a class="btn btn-quiet nav-secondary" href="#contact">Contact</a>
+      <a class="btn btn-solid btn-sm" href="mailto:hello@v1olet.xyz?subject=Engagement%20enquiry">Request an engagement</a>
     </div>
   </div>
 </header>
 
 <main id="main">
 
-<!-- ============ Hero ============ -->
+<!-- ===================== hero ===================== -->
 <section class="hero" id="top">
   <div class="shell hero-grid">
-    <div class="hero-lead">
-      <p class="eyebrow load" style="--d:0ms">Independent offensive security research</p>
-      <h1 class="load" style="--d:70ms">Offensive security,<br>proven on the<br><em>scoreboard.</em></h1>
-      <p class="lede load" style="--d:150ms">
-        We run penetration tests, red team operations, and vulnerability research.
-        Then we go and place against everyone else in public, and publish where we landed.
+    <div class="hero-copy">
+      <p class="eyebrow load" style="--d:0ms">Offensive security</p>
+      <h1 class="load" style="--d:60ms">Find the flaw before an attacker charges you for it.</h1>
+      <p class="lede load" style="--d:130ms">
+        v1olet runs penetration tests, red team operations, and vulnerability research for teams
+        that ship fast. Every finding comes reproducible, with a working proof of concept and a
+        retest once you have fixed it.
       </p>
-      <div class="hero-actions load" style="--d:220ms">
-        <a class="btn btn-solid" href="mailto:hello@v1olet.xyz">Request an engagement</a>
-        <a class="btn btn-ghost" href="#events">See the record</a>
+      <div class="hero-actions load" style="--d:200ms">
+        <a class="btn btn-solid btn-lg" href="mailto:hello@v1olet.xyz?subject=Engagement%20enquiry">Request an engagement</a>
+        <a class="btn btn-outline btn-lg" href="#capabilities">Explore capabilities</a>
       </div>
+      <ul class="hero-assur load" style="--d:260ms">
+        <li>Retest included</li>
+        <li>Named operators, no subcontracting</li>
+        <li>Findings as you go, not at the end</li>
+      </ul>
     </div>
 
-    <aside class="scope load" style="--d:300ms" aria-label="Engagement profile">
-      <div class="scope-head">
-        <svg class="petal" viewBox="0 0 48 48" aria-hidden="true">
-          <g fill="none" stroke="currentColor" stroke-width="1.1">
-            <ellipse cx="24" cy="14.4" rx="5.4" ry="9.6"/>
-            <ellipse cx="24" cy="14.4" rx="5.4" ry="9.6" transform="rotate(60 24 24)"/>
-            <ellipse cx="24" cy="14.4" rx="5.4" ry="9.6" transform="rotate(120 24 24)"/>
-            <ellipse cx="24" cy="14.4" rx="5.4" ry="9.6" transform="rotate(180 24 24)"/>
-            <ellipse cx="24" cy="14.4" rx="5.4" ry="9.6" transform="rotate(240 24 24)"/>
-            <ellipse cx="24" cy="14.4" rx="5.4" ry="9.6" transform="rotate(300 24 24)"/>
-          </g>
-          <circle cx="24" cy="24" r="3.1" fill="currentColor"/>
-        </svg>
-        <span>Engagement profile</span>
+    <!-- product-style artefact: what the client actually receives -->
+    <div class="deliverable load" style="--d:340ms" aria-label="Example of a findings report">
+      <div class="dl-chrome">
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="dl-file">engagement-report.pdf</span>
+        <span class="dl-stamp">Sample</span>
       </div>
-      <dl class="scope-list">
-        <div><dt>Disciplines</dt><dd>web · pwn · rev · crypto · forensics · osint · cloud</dd></div>
-        <div><dt>Operators</dt><dd><span id="op-count">30</span> across four time zones</dd></div>
-        <div><dt>Best finish</dt><dd>3rd of 731 — BroncoCTF</dd></div>
-        <div><dt>Largest field</dt><dd>7,000+ teams — Cyber Apocalypse</dd></div>
-        <div><dt>Enquiries</dt><dd><a href="mailto:hello@v1olet.xyz">hello@v1olet.xyz</a></dd></div>
-      </dl>
-    </aside>
-  </div>
-</section>
-
-<!-- ============ Practice ============ -->
-<section id="practice" class="band">
-  <div class="shell">
-    <div class="sec-head reveal">
-      <p class="eyebrow">Practice</p>
-      <h2>A small team that stays in the tooling.</h2>
-    </div>
-    <div class="practice-grid">
-      <div class="reveal">
-        <p class="prose">
-          v1olet is an independent offensive security team. We assess web applications,
-          APIs, and infrastructure, simulate adversaries against live detection, and take
-          software apart to find the bug classes automated tooling never reaches.
-        </p>
-        <p class="prose">
-          The same operators who run client engagements compete year-round under the
-          <strong>v1olet</strong> tag, against fields of five hundred to seven thousand teams.
-          It keeps the practice sharp, and it means our record is a matter of public record
-          rather than a case study we wrote about ourselves.
-        </p>
+      <div class="dl-scope">
+        <div><span>Scope</span>Web application · REST API</div>
+        <div><span>Window</span>10 working days</div>
       </div>
-      <div class="reveal disciplines" aria-label="Disciplines covered">
-        <p class="eyebrow">Coverage</p>
-        <ul id="discipline-list"></ul>
+      <div class="dl-sev">
+        <div class="sev-bar" role="img" aria-label="Severity split: 2 critical, 5 high, 7 medium, 3 low">
+          <i class="s-crit" style="flex:2"></i><i class="s-high" style="flex:5"></i><i class="s-med" style="flex:7"></i><i class="s-low" style="flex:3"></i>
+        </div>
+        <ul class="sev-key">
+          <li><span class="dot s-crit"></span>Critical<b>2</b></li>
+          <li><span class="dot s-high"></span>High<b>5</b></li>
+          <li><span class="dot s-med"></span>Medium<b>7</b></li>
+          <li><span class="dot s-low"></span>Low<b>3</b></li>
+        </ul>
       </div>
+      <ul class="dl-rows">
+        <li><span class="tag s-crit">Critical</span><span class="dl-title">Authentication bypass in session renewal</span><span class="dl-id">VLT-014</span></li>
+        <li><span class="tag s-high">High</span><span class="dl-title">Server-side request forgery in webhook fetch</span><span class="dl-id">VLT-021</span></li>
+        <li><span class="tag s-med">Medium</span><span class="dl-title">Tenant identifier accepted from client</span><span class="dl-id">VLT-033</span></li>
+      </ul>
+      <div class="dl-foot"><span>3 of 17 findings</span><span>Each with PoC and fix guidance</span></div>
     </div>
   </div>
 </section>
 
-<!-- ============ Capabilities ============ -->
-<section id="services">
+<!-- ===================== proof strip ===================== -->
+<div class="proof">
+  <div class="shell proof-in">
+    <p>Competed in 2026 at</p>
+    <ul>
+      <li>Hack The Box</li><li>OmniCTF</li><li>BroncoCTF</li><li>Guardians</li><li>CTFtime</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== capabilities ===================== -->
+<section id="capabilities">
   <div class="shell">
     <div class="sec-head reveal">
       <p class="eyebrow">Capabilities</p>
-      <h2>What an engagement gets you.</h2>
+      <h2>Five ways we get hired.</h2>
+      <p class="prose">Engagements are scoped individually. Most clients start with an assessment and move to continuous testing once the release cadence picks up.</p>
     </div>
-    <div class="caps">
-      <article class="cap reveal">
-        <h3>Penetration testing</h3>
-        <p class="prose">Web, API, and infrastructure assessments. Every finding arrives reproducible, with a working proof of concept and remediation your developers can act on.</p>
-        <span class="cap-out">Findings report</span>
-      </article>
-      <article class="cap reveal">
-        <h3>Red team operations</h3>
-        <p class="prose">Adversary simulation that measures whether you detect and respond, not just whether the perimeter holds on the day.</p>
-        <span class="cap-out">Attack narrative · detection gaps</span>
-      </article>
-      <article class="cap reveal">
-        <h3>Vulnerability research</h3>
-        <p class="prose">Deep review of software and protocols, down to the primitives, to surface the bug classes a scanner has no way to model.</p>
-        <span class="cap-out">Advisory · coordinated disclosure</span>
-      </article>
-      <article class="cap reveal">
-        <h3>Continuous testing</h3>
-        <p class="prose">Testing that runs alongside your release cycle rather than once a year, so findings land while the code is still fresh.</p>
-        <span class="cap-out">Rolling findings queue</span>
-      </article>
-      <article class="cap reveal">
-        <h3>Training and workshops</h3>
-        <p class="prose">Hands-on sessions built from real engagements and competition work, run for engineering and security teams.</p>
-        <span class="cap-out">Live lab · exercise set</span>
-      </article>
-    </div>
+    <div class="cap-grid" id="cap-grid"></div>
   </div>
 </section>
 
-<!-- ============ The record (signature) ============ -->
-<section id="events" class="record">
+<!-- ===================== process ===================== -->
+<section id="process" class="alt">
+  <div class="shell">
+    <div class="sec-head reveal">
+      <p class="eyebrow">How it works</p>
+      <h2>Four stages, no surprises on the invoice.</h2>
+    </div>
+    <ol class="steps">
+      <li class="step reveal">
+        <span class="step-n">01</span>
+        <h3>Scope</h3>
+        <p class="prose">We agree the targets, the rules of engagement, and the window. You get a fixed price and a named lead before anything starts.</p>
+      </li>
+      <li class="step reveal">
+        <span class="step-n">02</span>
+        <h3>Test</h3>
+        <p class="prose">Testing runs against a shared channel. Anything critical reaches you the hour we confirm it, not in a report six weeks later.</p>
+      </li>
+      <li class="step reveal">
+        <span class="step-n">03</span>
+        <h3>Report</h3>
+        <p class="prose">Each finding lands with reproduction steps, a proof of concept, business impact, and remediation your engineers can act on.</p>
+      </li>
+      <li class="step reveal">
+        <span class="step-n">04</span>
+        <h3>Retest</h3>
+        <p class="prose">Once you have shipped the fixes we verify them and reissue the report. Included in the original price.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===================== record ===================== -->
+<section id="record" class="record">
   <div class="shell">
     <div class="sec-head reveal">
       <p class="eyebrow">The record</p>
-      <h2>Where we placed, in public.</h2>
+      <h2>Our results are a matter of public record.</h2>
+      <p class="prose">The operators who run client work compete year-round under the v1olet tag. Placements below are as published by the organisers.</p>
     </div>
 
     <div class="figures reveal">
@@ -191,16 +201,17 @@
     </div>
 
     <ol class="ledger" id="events-list"></ol>
-    <p class="ledger-note reveal">Placements as published by the organisers. Team profile on <a href="https://ctftime.org/team/442036" target="_blank" rel="noopener noreferrer">CTFtime</a>.</p>
+    <p class="ledger-note reveal">Full history on <a href="https://ctftime.org/team/442036" target="_blank" rel="noopener noreferrer">CTFtime</a> · writeups on <a href="https://github.com/v1oletSec/writeups" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
   </div>
 </section>
 
-<!-- ============ Operators ============ -->
+<!-- ===================== team ===================== -->
 <section id="roster">
   <div class="shell">
     <div class="sec-head reveal">
-      <p class="eyebrow">Operators</p>
-      <h2>The people on the engagement.</h2>
+      <p class="eyebrow">Team</p>
+      <h2>The people who will be on your engagement.</h2>
+      <p class="prose">We do not subcontract. The operators listed here are the ones who do the work.</p>
     </div>
 
     <div class="tier reveal"><span>Leadership</span><span class="rule"></span><span class="tier-n" id="n-captain"></span></div>
@@ -214,40 +225,69 @@
   </div>
 </section>
 
-<!-- ============ Contact ============ -->
-<section id="contact" class="band">
-  <div class="shell contact-grid">
+<!-- ===================== cta ===================== -->
+<section class="cta" id="contact">
+  <div class="shell cta-in">
     <div class="reveal">
-      <p class="eyebrow">Engagements</p>
-      <h2>Start with the scope.</h2>
-      <p class="prose">Tell us what you are shipping and what you are worried about. We will come back with an approach, a timeline, and what the deliverable looks like.</p>
-      <div class="channels">
-        <a href="mailto:hello@v1olet.xyz"><span>Email</span> hello@v1olet.xyz</a>
-        <a href="https://www.linkedin.com/company/v1olet/" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span> /company/v1olet</a>
-        <a href="https://ctftime.org/team/442036" target="_blank" rel="noopener noreferrer"><span>CTFtime</span> Team 442036</a>
-        <a href="https://github.com/v1oletSec/writeups" target="_blank" rel="noopener noreferrer"><span>Writeups</span> v1oletSec/writeups</a>
+      <h2>Tell us what you are shipping.</h2>
+      <p class="prose">Send the stack, the deadline, and what worries you. We come back with an approach, a timeline, and a fixed price, usually within two working days.</p>
+      <div class="cta-actions">
+        <a class="btn btn-solid btn-lg" href="mailto:hello@v1olet.xyz?subject=Engagement%20enquiry">Request an engagement</a>
+        <a class="btn btn-outline btn-lg" href="https://www.linkedin.com/company/v1olet/" target="_blank" rel="noopener noreferrer">Message us on LinkedIn</a>
       </div>
     </div>
     <aside class="join reveal">
-      <p class="eyebrow">Join</p>
+      <p class="eyebrow">Careers</p>
       <h3>We are still recruiting operators.</h3>
-      <p class="prose">If you compete seriously in pwn, rev, web, crypto, or forensics and want a team that plays internationally, send us your record.</p>
-      <a class="btn btn-solid" href="https://forms.gle/sRLQVVkSxt32uKhk8" target="_blank" rel="noopener noreferrer">Apply to v1olet</a>
+      <p class="prose">If you compete seriously in pwn, rev, web, crypto, or forensics, send us your record.</p>
+      <a class="btn btn-quiet" href="https://forms.gle/sRLQVVkSxt32uKhk8" target="_blank" rel="noopener noreferrer">Apply to v1olet<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5"/></svg></a>
     </aside>
   </div>
 </section>
 
 </main>
 
+<!-- ===================== footer ===================== -->
 <footer>
-  <div class="shell foot-in">
-    <span>© 2026 v1olet — offensive security research</span>
-    <span class="foot-dim">Built by the team, for the team</span>
+  <div class="shell">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img class="wordmark lg-dark" src="./wordmark-nav-dark.png" alt="v1olet">
+        <img class="wordmark lg-light" src="./wordmark-nav-light.png" alt="v1olet">
+        <p>Independent offensive security team. Penetration testing, red team operations, and vulnerability research.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Capabilities</h4>
+        <a href="#capabilities">Penetration testing</a>
+        <a href="#capabilities">Red team operations</a>
+        <a href="#capabilities">Vulnerability research</a>
+        <a href="#capabilities">Continuous testing</a>
+        <a href="#capabilities">Training</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="#roster">Team</a>
+        <a href="#record">Record</a>
+        <a href="#process">How it works</a>
+        <a href="https://forms.gle/sRLQVVkSxt32uKhk8" target="_blank" rel="noopener noreferrer">Careers</a>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <a href="mailto:hello@v1olet.xyz">hello@v1olet.xyz</a>
+        <a href="https://www.linkedin.com/company/v1olet/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://ctftime.org/team/442036" target="_blank" rel="noopener noreferrer">CTFtime</a>
+        <a href="https://github.com/v1oletSec/writeups" target="_blank" rel="noopener noreferrer">Writeups</a>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>© 2026 v1olet</span>
+      <span>Security issues: <a href="mailto:hello@v1olet.xyz?subject=Responsible%20disclosure">responsible disclosure</a></span>
+    </div>
   </div>
 </footer>
 
 <button id="totop" type="button" aria-label="Back to top">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 13 6-6 6 6"/></svg>
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 13 6-6 6 6"/></svg>
 </button>
 
 <script type="module" src="./main.js"></script>
