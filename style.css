@@ -11,10 +11,27 @@
 
   --shell:1200px;
   --gut:clamp(20px,4.5vw,48px);
-  --sec-y:clamp(72px,9vw,128px);
   --r:8px;
   --r-sm:5px;
   --ease:cubic-bezier(.22,.7,.28,1);
+
+  /* spacing — 4px base, used instead of scattered one-off values */
+  --s1:4px;  --s2:8px;   --s3:12px; --s4:16px; --s5:24px;
+  --s6:32px; --s7:48px;  --s8:64px; --s9:96px; --s10:128px;
+
+  /* section rhythm is deliberately not uniform: dense sections breathe less
+     than the ones that carry a single argument. */
+  --sec-y:clamp(72px,8vw,112px);
+  --sec-y-wide:clamp(96px,11vw,160px);
+
+  /* type — the middle step (--t-h2) is what the old scale was missing */
+  --t-hero:clamp(2.375rem,4.6vw,3.75rem);
+  --t-h2:clamp(1.875rem,3.4vw,2.75rem);
+  --t-h3:clamp(1.1875rem,1.3vw,1.375rem);
+  --t-lede:clamp(1.0625rem,1.2vw,1.1875rem);
+  --t-body:1rem;
+  --t-meta:.8125rem;
+  --t-micro:.71875rem;
 
   /* severity scale — muted, never neon */
   --s-crit:#C43D57;
@@ -25,18 +42,23 @@
 
 :root[data-theme="light"]{
   --paper:#FFFFFF;
-  --alt:#F7F7FA;
+  --alt:#EFEFF4;
   --raised:#FFFFFF;
-  --sunk:#F1F1F6;
+  --sunk:#F4F4F8;
   --ink:#0B0B14;
   --ink-2:#2C2C3A;
-  --dim:#5C5C70;
-  --faint:#8A8A9C;
-  --rule:#E5E5EC;
-  --rule-2:#D4D4DF;
+  --dim:#55556A;
+  --faint:#6A6A7E;
+  --rule:#E3E3EA;
+  --rule-2:#D2D2DC;
   --violet:#4C2AC4;
   --violet-h:#5E3AD8;
   --violet-ink:#4C2AC4;
+  /* Fill behind white text. Split from --violet because a hue that reads well
+     as text on the page background is not automatically safe as a button
+     surface — in dark mode the two genuinely have to differ. */
+  --violet-solid:#4C2AC4;
+  --violet-solid-h:#5E3AD8;
   --wash:#F3EFFE;
   --sh-sm:0 1px 2px rgba(11,11,20,.06);
   --sh-md:0 2px 4px rgba(11,11,20,.04),0 12px 28px -14px rgba(11,11,20,.18);
@@ -44,19 +66,23 @@
 }
 
 :root[data-theme="dark"]{
-  --paper:#0A0A12;
-  --alt:#0E0E18;
-  --raised:#14141F;
-  --sunk:#101019;
-  --ink:#F6F6F9;
-  --ink-2:#DCDCE6;
+  --paper:#0B0B11;
+  --alt:#14141C;
+  --raised:#16161F;
+  --sunk:#0E0E15;
+  --ink:#F7F7FA;
+  --ink-2:#C9C9D6;
   --dim:#9A9AAE;
-  --faint:#6E6E83;
-  --rule:#20202C;
-  --rule-2:#2C2C3B;
+  --faint:#8A8A9E;
+  --rule:#23232F;
+  --rule-2:#32323F;
   --violet:#8E6BFF;
   --violet-h:#A184FF;
   --violet-ink:#A184FF;
+  /* #8E6BFF carries white text at only 3.69 — below AA — so button surfaces
+     go a step deeper while the text accent above stays bright. */
+  --violet-solid:#6E45E8;
+  --violet-solid-h:#7C55F5;
   --wash:#191331;
   --sh-sm:0 1px 2px rgba(0,0,0,.4);
   --sh-md:0 2px 4px rgba(0,0,0,.3),0 12px 28px -14px rgba(0,0,0,.7);
@@ -78,7 +104,7 @@ li{list-style:none}
 svg{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 
 :focus-visible{outline:2px solid var(--violet);outline-offset:2px;border-radius:3px}
-.skip{position:absolute;left:-9999px;top:8px;z-index:300;background:var(--violet);color:#fff;
+.skip{position:absolute;left:-9999px;top:8px;z-index:300;background:var(--violet-solid);color:#fff;
   padding:10px 16px;border-radius:var(--r-sm);font-family:var(--mono);font-size:13px}
 .skip:focus{left:12px}
 
@@ -87,15 +113,15 @@ section{padding-block:var(--sec-y)}
 .alt{background:var(--alt);border-block:1px solid var(--rule)}
 
 /* ---------- type ---------- */
-.eyebrow{font-family:var(--mono);font-size:11.5px;font-weight:500;text-transform:uppercase;
-  letter-spacing:.16em;color:var(--violet-ink);margin-bottom:16px}
-h1{font-size:clamp(2.3rem,5.2vw,3.9rem);font-weight:800;letter-spacing:-.038em;line-height:1.04;max-width:15ch}
-h2{font-size:clamp(1.75rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.032em;max-width:20ch}
-h3{font-size:1.125rem;font-weight:700;letter-spacing:-.018em}
-h4{font-size:.8125rem;font-weight:700;letter-spacing:.02em}
-.prose{color:var(--dim);font-size:1rem;line-height:1.7;max-width:60ch}
-.sec-head{margin-bottom:clamp(40px,4.5vw,64px)}
-.sec-head .prose{margin-top:18px}
+.eyebrow{font-family:var(--mono);font-size:var(--t-micro);font-weight:500;text-transform:uppercase;
+  letter-spacing:.16em;color:var(--violet-ink);margin-bottom:var(--s4)}
+h1{font-size:var(--t-hero);font-weight:700;letter-spacing:-.042em;line-height:1.04;max-width:15ch}
+h2{font-size:var(--t-h2);font-weight:700;letter-spacing:-.034em;max-width:19ch}
+h3{font-size:var(--t-h3);font-weight:700;letter-spacing:-.02em}
+h4{font-size:var(--t-meta);font-weight:700;letter-spacing:.02em}
+.prose{color:var(--dim);font-size:var(--t-body);line-height:1.7;max-width:58ch}
+.sec-head{margin-bottom:clamp(44px,5vw,72px)}
+.sec-head .prose{margin-top:var(--s5)}
 
 /* ---------- buttons ---------- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
@@ -106,8 +132,8 @@ h4{font-size:.8125rem;font-weight:700;letter-spacing:.02em}
 .btn svg{width:15px;height:15px}
 .btn-sm{padding:9px 15px;font-size:13.5px}
 .btn-lg{padding:14px 24px;font-size:15px}
-.btn-solid{background:var(--violet);color:#fff;border-color:var(--violet);box-shadow:var(--sh-sm)}
-.btn-solid:hover{background:var(--violet-h);border-color:var(--violet-h);transform:translateY(-1px);box-shadow:var(--sh-md)}
+.btn-solid{background:var(--violet-solid);color:#fff;border-color:var(--violet-solid);box-shadow:var(--sh-sm)}
+.btn-solid:hover{background:var(--violet-solid-h);border-color:var(--violet-solid-h);transform:translateY(-1px);box-shadow:var(--sh-md)}
 .btn-outline{border-color:var(--rule-2);color:var(--ink);background:var(--raised)}
 .btn-outline:hover{border-color:var(--violet);color:var(--violet-ink)}
 .btn-quiet{color:var(--ink);background:transparent}
@@ -118,7 +144,7 @@ h4{font-size:.8125rem;font-weight:700;letter-spacing:.02em}
 .announce-in{display:flex;align-items:center;gap:12px;min-height:42px;flex-wrap:wrap}
 .announce p{color:var(--dim);margin:0}
 .pill{font-family:var(--mono);font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.12em;
-  color:#fff;background:var(--violet);border-radius:100px;padding:3px 9px;flex-shrink:0}
+  color:#fff;background:var(--violet-solid);border-radius:100px;padding:3px 9px;flex-shrink:0}
 .announce a{display:inline-flex;align-items:center;gap:5px;color:var(--violet-ink);
   text-decoration:none;font-weight:500;white-space:nowrap}
 .announce a svg{width:14px;height:14px;transition:transform .2s var(--ease)}
@@ -153,6 +179,24 @@ h4{font-size:.8125rem;font-weight:700;letter-spacing:.02em}
 .topbar-end .btn-solid{display:none}
 @media(min-width:820px){.topnav{display:flex}.nav-secondary{display:inline-flex}}
 @media(min-width:1000px){.topbar-end .btn-solid{display:inline-flex}}
+
+/* ---------- mobile navigation ----------
+   Below 820px the inline nav is hidden, so this is the only way to reach a
+   section or the contact route. Hidden from the a11y tree via [hidden] when
+   closed, which also keeps its links out of the tab order. */
+.nav-toggle{display:grid}
+@media(min-width:820px){.nav-toggle{display:none}}
+.nav-toggle .ic-close{display:none}
+.nav-toggle[aria-expanded="true"] .ic-bars{display:none}
+.nav-toggle[aria-expanded="true"] .ic-close{display:block}
+.mobile-nav{border-top:1px solid var(--rule);background:var(--paper);
+  max-height:calc(100dvh - 66px);overflow-y:auto}
+.mobile-nav[hidden]{display:none}
+.mobile-nav-in{display:flex;flex-direction:column;gap:var(--s1);padding-block:var(--s3) var(--s5)}
+.mobile-nav a{font-family:var(--sans);font-size:1rem;font-weight:500;color:var(--ink);
+  text-decoration:none;padding:var(--s3) 0;border-bottom:1px solid var(--rule)}
+.mobile-nav a:last-child{border-bottom:0;margin-top:var(--s4);justify-content:center}
+.mobile-nav .btn{color:#fff}
 
 #progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--violet);z-index:250}
 
@@ -196,35 +240,48 @@ h4{font-size:.8125rem;font-weight:700;letter-spacing:.02em}
 .dl-rows li{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--rule)}
 .dl-rows .tag{font-family:var(--mono);font-size:9.5px;font-weight:500;text-transform:uppercase;
   letter-spacing:.1em;color:#fff;border-radius:3px;padding:3px 7px;flex-shrink:0;width:66px;text-align:center}
+/* The bar and dots are decorative, but these chips carry white text, so they
+   need the darker cut of the same hues to clear AA. */
+.dl-rows .tag.s-high{background:#9A5616}
+.dl-rows .tag.s-med{background:#2F63A8}
 .dl-title{font-size:13px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dl-id{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--faint);flex-shrink:0}
 .dl-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 16px;
   background:var(--sunk);font-family:var(--mono);font-size:11px;color:var(--faint)}
 
 /* ---------- proof strip ---------- */
-.proof{border-block:1px solid var(--rule);background:var(--alt);padding-block:22px}
-.proof-in{display:flex;flex-wrap:wrap;align-items:center;gap:12px clamp(20px,3vw,40px)}
-.proof p{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--faint);margin:0}
-.proof ul{display:flex;flex-wrap:wrap;gap:12px clamp(20px,3vw,40px)}
-.proof li{font-family:var(--sans);font-size:15px;font-weight:600;color:var(--dim);letter-spacing:-.015em}
+.proof{border-block:1px solid var(--rule);background:var(--alt);padding-block:var(--s5)}
+.proof-in{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s3) clamp(20px,3vw,40px)}
+.proof p{font-family:var(--mono);font-size:var(--t-micro);text-transform:uppercase;
+  letter-spacing:.14em;color:var(--faint);margin:0}
+.proof ul{display:flex;flex-wrap:wrap;gap:var(--s3) clamp(20px,3vw,40px)}
+.proof li{font-family:var(--sans);font-size:15px;font-weight:600;color:var(--ink-2);letter-spacing:-.015em}
+.proof-src{margin-left:auto!important}
+.proof-src a{color:var(--violet-ink);text-underline-offset:3px}
 
 /* ---------- capabilities ---------- */
-.cap-grid{display:grid;gap:16px}
+/* A rule grid, not six boxes: hairlines do the separating so the content sits
+   on the page instead of inside a container. */
+.cap-grid{display:grid;gap:1px;background:var(--rule);
+  border-block:1px solid var(--rule)}
 @media(min-width:640px){.cap-grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1000px){.cap-grid{grid-template-columns:repeat(3,1fr)}}
-.cap{display:flex;flex-direction:column;background:var(--raised);border:1px solid var(--rule);
-  border-radius:var(--r);padding:26px 24px 24px;
-  transition:border-color .2s var(--ease),box-shadow .2s var(--ease),transform .2s var(--ease)}
-.cap:hover{border-color:var(--rule-2);box-shadow:var(--sh-md);transform:translateY(-2px)}
-.cap-ic{display:grid;place-items:center;width:40px;height:40px;border-radius:var(--r-sm);
-  background:var(--wash);color:var(--violet-ink);margin-bottom:18px}
-.cap-ic svg{width:20px;height:20px}
-.cap h3{margin-bottom:9px}
-.cap .prose{font-size:.95rem}
-.cap-quiet{background:var(--sunk);border-style:dashed}
-.cap-quiet .cap-ic{background:transparent;border:1px dashed var(--rule-2);color:var(--faint)}
-.cap-out{margin-top:20px;padding-top:14px;border-top:1px solid var(--rule);
-  font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--faint)}
+.cap{display:flex;flex-direction:column;background:var(--paper);
+  padding:var(--s6) clamp(20px,2.4vw,32px) var(--s6);
+  transition:background .22s var(--ease)}
+.cap:hover{background:var(--alt)}
+.cap-ic{color:var(--violet-ink);margin-bottom:var(--s5)}
+.cap-ic svg{width:22px;height:22px}
+.cap h3{margin-bottom:var(--s2)}
+.cap .prose{font-size:.9375rem;max-width:34ch}
+.cap-quiet{background:var(--alt)}
+.cap-quiet:hover{background:var(--sunk)}
+.cap-quiet .cap-ic{color:var(--faint)}
+/* auto pushes this to the card floor so the labels align across a row
+   regardless of how long the body copy above them runs. */
+.cap-out{margin-top:auto;padding-top:var(--s6);
+  font-family:var(--mono);font-size:var(--t-micro);text-transform:uppercase;
+  letter-spacing:.12em;color:var(--faint)}
 
 /* ---------- process ---------- */
 .steps{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden}
@@ -238,29 +295,33 @@ h4{font-size:.8125rem;font-weight:700;letter-spacing:.02em}
 .step .prose{font-size:.9375rem}
 
 /* ---------- record ---------- */
-.record{background:#08060F;color:#F6F6F9;border-block:1px solid #1B1730}
+.record{background:#08060F;color:#F6F6F9;border-block:1px solid #1B1730;
+  padding-block:var(--sec-y-wide)}
 .record .eyebrow{color:#A184FF}
 .record h2{color:#F6F6F9}
 .record .prose{color:#9B93B5}
 
-.figures{display:grid;gap:1px;background:#1B1730;border:1px solid #1B1730;border-radius:var(--r);
-  overflow:hidden;margin-bottom:clamp(40px,4.5vw,60px)}
-@media(min-width:700px){.figures{grid-template-columns:repeat(3,1fr)}}
-.figure{background:#0C0917;padding:26px 24px}
-.fig-n{display:block;font-family:var(--sans);font-weight:800;font-size:clamp(2rem,3.4vw,2.6rem);
-  letter-spacing:-.04em;color:#F6F6F9;font-variant-numeric:tabular-nums;line-height:1.05}
-.fig-l{display:block;margin-top:8px;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;
-  letter-spacing:.13em;color:#8A82A6}
+/* No box. The figures stand on the page, separated by a single rule — the
+   numbers are the argument, a container would only shrink them. */
+/* The figures share the ledger's top rule, so the stats read as its header
+   rather than as a separate slab floating above it. */
+.figures{display:grid;gap:var(--s7) var(--s5);
+  padding-block:clamp(40px,4.5vw,56px);border-top:1px solid #1B1730}
+@media(min-width:700px){.figures{grid-template-columns:repeat(3,1fr);gap:var(--s5)}}
+.fig-n{display:block;font-family:var(--sans);font-weight:700;font-size:clamp(2.75rem,5.2vw,4rem);
+  letter-spacing:-.05em;color:#F6F6F9;font-variant-numeric:tabular-nums;line-height:.98}
+.fig-l{display:block;margin-top:var(--s3);font-family:var(--mono);font-size:var(--t-micro);
+  text-transform:uppercase;letter-spacing:.13em;color:#9C94B8}
 
 .ledger{border-top:1px solid #1B1730}
-.row{display:grid;grid-template-columns:minmax(76px,104px) 1fr;gap:4px clamp(16px,3vw,36px);
-  align-items:center;padding:clamp(18px,2.2vw,26px) 0;border-bottom:1px solid #1B1730;position:relative}
+.row{display:grid;grid-template-columns:minmax(96px,132px) 1fr;gap:var(--s1) clamp(20px,3.4vw,44px);
+  align-items:center;padding:clamp(22px,2.6vw,32px) 0;border-bottom:1px solid #1B1730;position:relative}
 .row::after{content:"";position:absolute;inset:0 -18px;border-radius:var(--r-sm);
   background:rgba(255,255,255,.035);opacity:0;transition:opacity .22s var(--ease);pointer-events:none}
 .row:hover::after{opacity:1}
 .row > *{position:relative;z-index:1}
-.rk{font-family:var(--sans);font-weight:800;font-variant-numeric:tabular-nums;
-  font-size:clamp(2.1rem,4.4vw,3.3rem);line-height:.95;letter-spacing:-.05em;
+.rk{font-family:var(--sans);font-weight:700;font-variant-numeric:tabular-nums;
+  font-size:clamp(2.6rem,5.6vw,4.25rem);line-height:.92;letter-spacing:-.055em;
   text-align:right;color:#F6F6F9;white-space:nowrap}
 .rk sup{font-size:.36em;font-weight:600;letter-spacing:0;color:#A184FF;
   vertical-align:baseline;position:relative;top:-1.5em;margin-left:.07em}
@@ -282,38 +343,79 @@ h4{font-size:.8125rem;font-weight:700;letter-spacing:.02em}
 .tier .rule{flex:1;height:1px;background:var(--rule)}
 .tier-n{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.08em}
 
-.op-grid{display:grid;gap:14px;grid-template-columns:1fr}
-@media(min-width:520px){.op-grid{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:880px){.op-grid{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:1080px){.op-grid{grid-template-columns:repeat(4,1fr)}}
-.op{position:relative;display:flex;flex-direction:column;height:100%;background:var(--raised);
-  border:1px solid var(--rule);border-radius:var(--r);padding:20px;
+/* Three tiers, three genuinely different treatments. Content is aligned to the
+   start rather than stretched, so a member without a quote or links leaves no
+   hole — the card just ends. */
+.op-grid{display:grid;gap:var(--s3);grid-template-columns:1fr}
+.op{position:relative;display:flex;flex-direction:column;align-content:start;
+  background:var(--raised);border:1px solid var(--rule);border-radius:var(--r);padding:var(--s5);
   transition:border-color .2s var(--ease),box-shadow .2s var(--ease),transform .2s var(--ease)}
 .op:hover{border-color:var(--rule-2);box-shadow:var(--sh-md);transform:translateY(-2px)}
-.op-tag{position:absolute;top:12px;right:12px;background:var(--wash);color:var(--violet-ink);
-  font-family:var(--mono);font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.11em;
-  padding:3px 7px;border-radius:3px}
-.op .avatar{width:48px;height:48px;border-radius:var(--r-sm);overflow:hidden;flex-shrink:0;
+.op-tag{font-family:var(--mono);font-size:9.5px;font-weight:500;text-transform:uppercase;
+  letter-spacing:.11em;color:var(--violet-ink)}
+.op .avatar{width:44px;height:44px;border-radius:50%;overflow:hidden;flex-shrink:0;
   display:grid;place-items:center;background:var(--wash);color:var(--violet-ink);
-  border:1px solid var(--rule);font-family:var(--mono);font-size:15px;font-weight:500}
+  border:1px solid var(--rule);font-family:var(--mono);font-size:14px;font-weight:500}
 .op .avatar img{width:100%;height:100%;object-fit:cover}
-.lead .avatar{width:56px;height:56px}
-.op-name{margin-top:14px;font-family:var(--sans);font-size:1rem;font-weight:700;
-  letter-spacing:-.015em;overflow-wrap:anywhere}
-.op-spec{margin-top:2px;font-size:12.5px;color:var(--dim)}
-.op blockquote{margin:12px 0 0;font-size:13px;line-height:1.6;color:var(--dim);
-  padding-left:12px;border-left:2px solid var(--rule-2)}
-.op .skills{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto;padding-top:16px}
+.op-name{font-family:var(--sans);font-weight:700;letter-spacing:-.018em;overflow-wrap:anywhere}
+.op-spec{color:var(--dim)}
+.op blockquote{margin:0;color:var(--dim)}
+.op .skills{display:flex;flex-wrap:wrap;gap:var(--s1)}
 .op .skills span{font-family:var(--mono);font-size:10px;color:var(--dim);background:var(--sunk);
-  border-radius:3px;padding:3px 7px}
-.op .socials{display:flex;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid var(--rule)}
-.op .socials a{display:grid;place-items:center;width:28px;height:28px;border-radius:var(--r-sm);
+  border:1px solid var(--rule);border-radius:3px;padding:2px 7px}
+.op .socials{display:flex;gap:var(--s1)}
+.op .socials a{display:grid;place-items:center;width:30px;height:30px;border-radius:var(--r-sm);
   color:var(--faint);transition:color .16s var(--ease),background .16s var(--ease)}
 .op .socials a:hover{color:var(--violet-ink);background:var(--wash)}
 .op .socials svg{width:15px;height:15px;fill:currentColor;stroke:none}
 
+/* --- leadership: the widest card, avatar beside the name, quote carries --- */
+/* start, not stretch: a card without a quote ends early instead of padding
+   itself out to match its neighbour. Ragged bottoms beat interior holes. */
+.lead-grid,.core-grid{align-items:start}
+.lead-grid{gap:var(--s4)}
+@media(min-width:760px){.lead-grid{grid-template-columns:repeat(2,1fr)}}
+.op.lead{padding:clamp(24px,2.6vw,32px);gap:var(--s4)}
+.op.lead .op-head{display:flex;align-items:center;gap:var(--s4)}
+.op.lead .avatar{width:60px;height:60px}
+.op.lead .op-name{font-size:1.25rem}
+.op.lead .op-spec{font-size:var(--t-meta);margin-top:2px}
+.op.lead .op-tag{display:block;margin-bottom:var(--s1)}
+.op.lead blockquote{font-size:.9375rem;line-height:1.6;padding-left:var(--s4);
+  border-left:2px solid var(--violet);color:var(--ink-2)}
+
+/* --- core: compact card, three up --- */
+@media(min-width:560px){.core-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:940px){.core-grid{grid-template-columns:repeat(3,1fr)}}
+.op.core{gap:var(--s3)}
+.op.core .op-head{display:flex;align-items:center;gap:var(--s3)}
+.op.core .op-name{font-size:1rem}
+.op.core .op-spec{font-size:12.5px;margin-top:1px}
+.op.core .op-tag{display:block;margin-bottom:2px}
+.op.core blockquote{font-size:13px;line-height:1.55}
+
+/* --- members: rows, not cards. Removes the card-carpet entirely. --- */
+.member-grid{gap:0;border-block:1px solid var(--rule)}
+@media(min-width:720px){.member-grid{grid-template-columns:repeat(2,1fr);column-gap:var(--s7)}}
+.op.member{flex-direction:row;align-items:center;gap:var(--s4);
+  background:transparent;border:0;border-radius:0;border-bottom:1px solid var(--rule);
+  padding:var(--s4) 0}
+.op.member:hover{background:transparent;box-shadow:none;transform:none}
+.op.member:hover .op-name{color:var(--violet-ink)}
+.op.member .op-name{font-size:.9375rem;transition:color .16s var(--ease)}
+.op.member .avatar{width:36px;height:36px}
+.op.member .op-body{min-width:0;flex:1}
+.op.member .op-spec{font-size:12px;margin-top:1px}
+.op.member .op-tag{margin-left:var(--s2)}
+.op.member .skills{margin-left:auto;flex-shrink:0;display:none}
+@media(min-width:1080px){.op.member .skills{display:flex}}
+.op.member .socials{flex-shrink:0}
+/* The last row in each column should not draw a rule against the container's. */
+@media(min-width:720px){.op.member:nth-last-child(-n+2):nth-child(odd),
+  .op.member:nth-last-child(-n+2):nth-child(odd) ~ .op.member{border-bottom:0}}
+
 /* ---------- cta ---------- */
-.cta{background:var(--alt);border-top:1px solid var(--rule)}
+.cta{background:var(--alt);border-top:1px solid var(--rule);padding-block:var(--sec-y-wide)}
 .cta-in{display:grid;gap:clamp(36px,4vw,56px)}
 @media(min-width:940px){.cta-in{grid-template-columns:1.25fr 1fr;align-items:start}}
 .cta h2{margin-bottom:16px}

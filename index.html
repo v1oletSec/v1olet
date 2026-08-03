@@ -65,12 +65,30 @@
       <a href="#roster">Team</a>
     </nav>
     <div class="topbar-end">
+      <button id="nav-toggle" type="button" class="icon-btn nav-toggle" aria-label="Open menu"
+              aria-expanded="false" aria-controls="mobile-nav">
+        <svg class="ic-bars" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="ic-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
       <button id="theme-toggle" type="button" class="icon-btn" aria-label="Switch colour theme" title="Switch colour theme">
         <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.1M12 19.3v2.1M4.6 4.6l1.5 1.5M17.9 17.9l1.5 1.5M2.6 12h2.1M19.3 12h2.1M4.6 19.4l1.5-1.5M17.9 6.1l1.5-1.5"/></svg>
         <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13.2A8.6 8.6 0 1 1 10.8 3.5a6.8 6.8 0 0 0 9.7 9.7z"/></svg>
       </button>
       <a class="btn btn-quiet nav-secondary" href="#contact">Contact</a>
       <a class="btn btn-solid btn-sm" href="mailto:hello@v1olet.xyz?subject=Engagement%20enquiry">Request an engagement</a>
+    </div>
+  </div>
+
+  <!-- Collapsed on small screens; the only navigation path there, so it also
+       carries the contact route rather than just the section links. -->
+  <div class="mobile-nav" id="mobile-nav" hidden>
+    <div class="shell mobile-nav-in">
+      <a href="#capabilities">Capabilities</a>
+      <a href="#process">How it works</a>
+      <a href="#record">Record</a>
+      <a href="#roster">Team</a>
+      <a href="#contact">Contact</a>
+      <a class="btn btn-solid btn-lg" href="mailto:hello@v1olet.xyz?subject=Engagement%20enquiry">Request an engagement</a>
     </div>
   </div>
 </header>
@@ -136,8 +154,9 @@
   <div class="shell proof-in">
     <p>Competed in 2026 at</p>
     <ul>
-      <li>Hack The Box</li><li>OmniCTF</li><li>BroncoCTF</li><li>Guardians</li><li>CTFtime</li>
+      <li>Hack The Box</li><li>OmniCTF</li><li>BroncoCTF</li><li>Operation Heist</li><li>THEM?!</li><li>Guardians</li>
     </ul>
+    <p class="proof-src">Verify on <a href="https://ctftime.org/team/442036" target="_blank" rel="noopener noreferrer">CTFtime</a></p>
   </div>
 </div>
 
@@ -218,10 +237,10 @@
     <div class="op-grid lead-grid" id="captains-grid"></div>
 
     <div class="tier reveal"><span>Core members</span><span class="rule"></span><span class="tier-n" id="n-core"></span></div>
-    <div class="op-grid" id="core-grid"></div>
+    <div class="op-grid core-grid" id="core-grid"></div>
 
     <div class="tier reveal"><span>Team members</span><span class="rule"></span><span class="tier-n" id="n-member"></span></div>
-    <div class="op-grid" id="members-grid"></div>
+    <div class="op-grid member-grid" id="members-grid"></div>
   </div>
 </section>
 

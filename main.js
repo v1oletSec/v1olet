@@ -100,15 +100,40 @@ const socialsHtml = m => {
   return items ? `<div class="socials">${items}</div>` : '';
 };
 
-// Leadership shows its role; everyone else only shows a tag if one is set.
-const card = lead => (m, i) => {
-  const tag = lead ? m.role : m.roleTag;
-  return `
-  <article class="op${lead ? ' lead' : ''} reveal" style="animation-delay:${Math.min(i, 7) * 60}ms">
-    ${tag ? `<span class="op-tag">${esc(tag)}</span>` : ''}
+/* Three tiers render three different shapes. Leadership and core are cards
+   (avatar beside the name, quote below); members are compact rows, which is
+   what stops thirty near-identical boxes reading as a card carpet.
+   Every optional field is emitted only when present, so a member without a
+   quote or links simply produces a shorter card rather than an empty slot. */
+const card = variant => (m, i) => {
+  // Leadership shows its role; the other tiers only show a tag if one is set.
+  const tag = variant === 'lead' ? m.role : m.roleTag;
+  const tagHtml = tag ? `<span class="op-tag">${esc(tag)}</span>` : '';
+  const delay = `style="animation-delay:${Math.min(i, 7) * 60}ms"`;
+
+  if (variant === 'member') {
+    return `
+  <article class="op member reveal" ${delay}>
     ${avatarHtml(m)}
-    <h3 class="op-name">${esc(m.name)}</h3>
-    <div class="op-spec">${esc(m.specialty)}</div>
+    <div class="op-body">
+      <h3 class="op-name">${esc(m.name)}${tagHtml}</h3>
+      <div class="op-spec">${esc(m.specialty)}</div>
+    </div>
+    ${skillsHtml(m)}
+    ${socialsHtml(m)}
+  </article>`;
+  }
+
+  return `
+  <article class="op ${variant} reveal" ${delay}>
+    <div class="op-head">
+      ${avatarHtml(m)}
+      <div class="op-id">
+        ${tagHtml}
+        <h3 class="op-name">${esc(m.name)}</h3>
+        <div class="op-spec">${esc(m.specialty)}</div>
+      </div>
+    </div>
     ${m.quote ? `<blockquote>${esc(m.quote)}</blockquote>` : ''}
     ${skillsHtml(m)}
     ${socialsHtml(m)}
@@ -116,14 +141,14 @@ const card = lead => (m, i) => {
 };
 
 const TIERS = {
-  captain: { grid: 'captains-grid', count: 'n-captain', lead: true },
-  core:    { grid: 'core-grid',     count: 'n-core',    lead: false },
-  member:  { grid: 'members-grid',  count: 'n-member',  lead: false }
+  captain: { grid: 'captains-grid', count: 'n-captain', variant: 'lead' },
+  core:    { grid: 'core-grid',     count: 'n-core',    variant: 'core' },
+  member:  { grid: 'members-grid',  count: 'n-member',  variant: 'member' }
 };
 
 for (const [tier, cfg] of Object.entries(TIERS)) {
   const group = roster.filter(m => m.tier === tier);
-  $(cfg.grid).innerHTML = group.map(card(cfg.lead)).join('');
+  $(cfg.grid).innerHTML = group.map(card(cfg.variant)).join('');
   $(cfg.count).textContent = String(group.length).padStart(2, '0');
 }
 
@@ -192,6 +217,40 @@ totop.addEventListener('click', () => scrollTo({ top: 0, behavior: reduced ? 'au
     try { localStorage.setItem('theme', next); } catch { /* storage unavailable — session only */ }
     btn.setAttribute('aria-label', `Switch to ${next === 'light' ? 'dark' : 'light'} theme`);
   });
+})();
+
+/* ------------------------------------------------------------ mobile nav --
+   Below 820px this is the only navigation, so it has to survive keyboard use:
+   Escape closes and returns focus, and the panel is [hidden] when closed so
+   its links stay out of the tab order. */
+(function initMobileNav() {
+  const btn = $('nav-toggle'), panel = $('mobile-nav');
+  if (!btn || !panel) return;
+
+  const setOpen = (open, moveFocus = false) => {
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    panel.hidden = !open;
+    // The panel sits after the header controls in the DOM, so without this a
+    // keyboard user would tab through the theme toggle and CTA before reaching
+    // the menu they just opened.
+    if (open && moveFocus) panel.querySelector('a')?.focus();
+  };
+
+  btn.addEventListener('click', () => setOpen(btn.getAttribute('aria-expanded') !== 'true', true));
+
+  // Jumping to a section should dismiss the panel covering it.
+  panel.addEventListener('click', e => { if (e.target.closest('a')) setOpen(false); });
+
+  addEventListener('keydown', e => {
+    if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+      setOpen(false);
+      btn.focus();
+    }
+  });
+
+  // Leaving the breakpoint with the panel open would otherwise strand it.
+  matchMedia('(min-width:820px)').addEventListener('change', e => { if (e.matches) setOpen(false); });
 })();
 
 /* --------------------------------------------------------- nav highlight --*/
