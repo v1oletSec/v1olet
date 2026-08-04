@@ -1,0 +1,64 @@
+# Build the static export and publish it to GitHub Pages.
+#
+# Replaces the previous "push HTML to main and Pages serves it" flow: the
+# source is now a Next.js project, so `main` holds source and Pages serves the
+# built `out/` directory through the Pages artifact mechanism.
+#
+# One-time setup in the repository: Settings → Pages → Source → "GitHub Actions".
+# The custom domain keeps working because `public/CNAME` is copied into the
+# export on every build.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never run two deployments at once; queue the newest and let it win.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Verify colour contrast
+        run: npm run check:contrast
+
+      - name: Build static export
+        run: npm run build
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
