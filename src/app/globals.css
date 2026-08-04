@@ -1,0 +1,517 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   v1olet — design tokens
+   --------------------------------------------------------------------------
+   The palette is derived from the logo, not chosen alongside it. Two violets
+   are sampled directly out of the mark:
+
+     #6840F4  hero wordmark + favicon  → brand-500, the dark-theme primary
+     #4E2BCC  public/logo.png          → brand-700, the light-theme primary
+                                         (AA against white; #6840F4 is not)
+
+   Everything else is a ramp built around those two anchors, plus a neutral
+   scale and the four severity colours carried over from the previous site's
+   report styling — they were already a coherent set and clients read them.
+
+   THEMING MODEL
+   Colour is expressed twice: once as a raw palette (theme-independent) and
+   once as semantic tokens (`--surface`, `--ink`, …) that flip per theme.
+   Components only ever reference semantic tokens, so adding a third theme
+   would touch this file alone.
+
+   Resolution order for the active theme:
+     1. `data-theme` on <html>, written by the inline script in layout.tsx
+     2. absent that, `prefers-color-scheme` via the media query below
+   The script sets the attribute on first paint, so there is no flash; the
+   media query is the no-JS fallback and stays authoritative for `system`.
+   ========================================================================== */
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme {
+  /* ---- type ------------------------------------------------------------ */
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ---- brand ramp (anchored on the logo) -------------------------------- */
+  --color-brand-50: #f3efff;
+  --color-brand-100: #e4dbff;
+  --color-brand-200: #cbbaff;
+  --color-brand-300: #ae94ff;
+  --color-brand-400: #8e6bff;
+  --color-brand-500: #6840f4;
+  --color-brand-600: #5a2fd6;
+  --color-brand-700: #4e2bcc;
+  --color-brand-800: #3a1f9e;
+  --color-brand-900: #281566;
+  --color-brand-950: #17102e;
+
+  /* ---- neutrals --------------------------------------------------------- */
+  --color-ink-0: #ffffff;
+  --color-ink-50: #f7f7fa;
+  --color-ink-100: #f1f1f4;
+  --color-ink-200: #e2e2e8;
+  --color-ink-300: #c9c9d2;
+  --color-ink-400: #9c9ca8;
+  --color-ink-500: #6b6b78;
+  --color-ink-600: #4a4a56;
+  --color-ink-700: #33333d;
+  --color-ink-800: #24242b;
+  --color-ink-850: #16161c;
+  --color-ink-900: #101014;
+  --color-ink-950: #08080a;
+
+  /* ---- severity (carried over from the previous report styling) --------- */
+  --color-sev-critical: #d64560;
+  --color-sev-high: #d0803a;
+  --color-sev-medium: #4a82c9;
+  --color-sev-low: #4e9a80;
+  --color-sev-info: #6b6b78;
+
+  /* ---- semantic aliases, resolved from the theme block below ------------ */
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-panel: var(--surface-panel);
+  --color-surface-sunk: var(--surface-sunk);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-faint: var(--fg-faint);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-contrast: var(--accent-contrast);
+  --color-accent-wash: var(--accent-wash);
+
+  /* ---- layout ----------------------------------------------------------- */
+  --spacing-gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --container-shell: 84rem;
+
+  /* ---- motion ----------------------------------------------------------- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* ---- easing-aware animations ------------------------------------------ */
+  --animate-marquee: marquee 42s linear infinite;
+  --animate-scan: scan 6s var(--ease-in-out-quart) infinite;
+  --animate-pulse-ring: pulse-ring 2.4s var(--ease-out-expo) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   Semantic tokens — light is the default declaration, dark overrides it.
+   -------------------------------------------------------------------------- */
+:root {
+  --surface: #ffffff;
+  --surface-raised: #f7f7fa;
+  --surface-panel: #f1f1f4;
+  --surface-sunk: #eaeaef;
+  --fg: #08080a;
+  --fg-muted: #4a4a56;
+  --fg-faint: #6b6b78;
+  --rule: #e2e2e8;
+  --rule-strong: #c9c9d2;
+  --accent: #4e2bcc;
+  --accent-hover: #3a1f9e;
+  --accent-contrast: #ffffff;
+  --accent-wash: #f3efff;
+  --grid-line: rgb(8 8 10 / 0.05);
+  --glow: rgb(78 43 204 / 0.18);
+  --shadow-panel: 0 1px 2px rgb(8 8 10 / 0.04), 0 12px 32px -18px rgb(8 8 10 / 0.22);
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --surface: #08080a;
+  --surface-raised: #101014;
+  --surface-panel: #16161c;
+  --surface-sunk: #0b0b0e;
+  --fg: #ffffff;
+  --fg-muted: #b8b8c4;
+  --fg-faint: #9c9ca8;
+  --rule: #24242b;
+  --rule-strong: #33333d;
+  --accent: #a98bff;
+  --accent-hover: #cbbaff;
+  --accent-contrast: #ffffff;
+  --accent-wash: #17102e;
+  --grid-line: rgb(255 255 255 / 0.045);
+  --glow: rgb(104 64 244 / 0.35);
+  --shadow-panel: 0 1px 0 rgb(255 255 255 / 0.03), 0 24px 64px -32px rgb(0 0 0 / 0.9);
+  color-scheme: dark;
+}
+
+/* No-JS / `system` preference fallback. The inline theme script writes
+   data-theme before first paint, so this only ever applies when scripting is
+   unavailable — but it must exist, or a no-JS visitor on a dark OS gets a
+   white page. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --surface: #08080a;
+    --surface-raised: #101014;
+    --surface-panel: #16161c;
+    --surface-sunk: #0b0b0e;
+    --fg: #ffffff;
+    --fg-muted: #b8b8c4;
+    --fg-faint: #9c9ca8;
+    --rule: #24242b;
+    --rule-strong: #33333d;
+    --accent: #a98bff;
+    --accent-hover: #cbbaff;
+    --accent-contrast: #ffffff;
+    --accent-wash: #17102e;
+    --grid-line: rgb(255 255 255 / 0.045);
+    --glow: rgb(104 64 244 / 0.35);
+    --shadow-panel: 0 1px 0 rgb(255 255 255 / 0.03), 0 24px 64px -32px rgb(0 0 0 / 0.9);
+    color-scheme: dark;
+  }
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+@layer base {
+  * {
+    border-color: var(--rule);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 7rem;
+    /* Smooth scrolling is opt-in per user preference, never forced. */
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--surface);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.03;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* A single, unmistakable focus ring. Never removed, only restyled. */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-contrast);
+  }
+
+  /* Scrollbar tuned to the surface so the dark theme is not framed in white. */
+  * {
+    scrollbar-color: var(--rule-strong) transparent;
+    scrollbar-width: thin;
+  }
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+@utility shell {
+  width: 100%;
+  max-width: var(--container-shell);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+/** Monospaced eyebrow label — the site's most repeated typographic device. */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/** Tabular figures for anything that is a measurement or a rank. */
+@utility numeric {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/** The engineering-drawing grid that structures full-bleed sections. */
+@utility grid-field {
+  background-image: linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+}
+
+/** Corner ticks, applied to panels that should read as instrument surfaces. */
+@utility ticked {
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 0.5rem;
+    height: 0.5rem;
+    border: 1px solid var(--accent);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  &::before {
+    top: -1px;
+    left: -1px;
+    border-right: 0;
+    border-bottom: 0;
+  }
+
+  &::after {
+    right: -1px;
+    bottom: -1px;
+    border-left: 0;
+    border-top: 0;
+  }
+}
+
+/** Long-form body copy inside MDX and legal pages. */
+@utility prose-v1 {
+  color: var(--fg-muted);
+  font-size: 1rem;
+  line-height: 1.75;
+
+  & > * + * {
+    margin-top: 1.25rem;
+  }
+
+  & h2 {
+    color: var(--fg);
+    font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+    margin-top: 3rem;
+    text-transform: uppercase;
+  }
+
+  & h3 {
+    color: var(--fg);
+    font-size: 1.15rem;
+    margin-top: 2.25rem;
+  }
+
+  & a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+
+  & a:hover {
+    color: var(--accent-hover);
+  }
+
+  & strong {
+    color: var(--fg);
+    font-weight: 600;
+  }
+
+  & ul,
+  & ol {
+    padding-left: 1.25rem;
+  }
+
+  & ul > li {
+    list-style: none;
+    position: relative;
+  }
+
+  & ul > li::before {
+    content: '';
+    position: absolute;
+    left: -1rem;
+    top: 0.7em;
+    width: 0.375rem;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  & ol {
+    list-style: decimal;
+  }
+
+  & li + li {
+    margin-top: 0.5rem;
+  }
+
+  & blockquote {
+    border-left: 2px solid var(--accent);
+    padding: 0.75rem 0 0.75rem 1.25rem;
+    background: var(--accent-wash);
+    color: var(--fg);
+  }
+
+  & blockquote p + p {
+    margin-top: 0.75rem;
+  }
+
+  & code:not(pre code) {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--surface-panel);
+    border: 1px solid var(--rule);
+    padding: 0.1em 0.35em;
+    color: var(--fg);
+  }
+
+  & pre {
+    background: var(--surface-sunk) !important;
+    border: 1px solid var(--rule);
+    padding: 1.25rem;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.65;
+  }
+
+  & pre code {
+    font-family: var(--font-mono);
+    display: grid;
+  }
+
+  /* Tables must scroll inside their own box, never widen the page. */
+  & table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  & :is(th, td) {
+    border-bottom: 1px solid var(--rule);
+    padding: 0.65rem 0.75rem;
+    text-align: left;
+  }
+
+  & th {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-faint);
+  }
+
+  & hr {
+    border: 0;
+    border-top: 1px solid var(--rule);
+  }
+}
+
+/* Horizontal overflow guard for wide MDX blocks. */
+@utility scroll-x {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+/* ==========================================================================
+   Keyframes — every consumer is behind a reduced-motion check in JS or CSS.
+   ========================================================================== */
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes scan {
+  0%,
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+  70%,
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Global reduced-motion contract.
+   JS-driven motion is gated at the source (see src/lib/motion.ts); this block
+   is the safety net for anything CSS-driven, including third-party markup.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Shiki (rehype-pretty-code) theme bridging: one highlighted output, two themes. */
+[data-rehype-pretty-code-figure] pre {
+  background-color: var(--surface-sunk) !important;
+}
+
+[data-theme='dark'] code[data-theme] span,
+[data-theme='dark'] code[data-theme] {
+  color: var(--shiki-dark) !important;
+}
+
+:root:not([data-theme='dark']) code[data-theme] span,
+:root:not([data-theme='dark']) code[data-theme] {
+  color: var(--shiki-light) !important;
+}
+
+code[data-line-numbers] {
+  counter-reset: line;
+}
+
+code[data-line-numbers] > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 1.5rem;
+  margin-right: 1.25rem;
+  text-align: right;
+  color: var(--fg-faint);
+  opacity: 0.5;
+}
