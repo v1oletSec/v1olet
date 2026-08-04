@@ -1,0 +1,103 @@
+---
+title: "Cache deception to account takeover in a multi-tenant dashboard"
+event: "Sample content"
+category: "web"
+date: "2026-07-28"
+author: "PLACEHOLDER — replace with the operator who wrote this"
+summary: "A path-confusion primitive between an edge cache and an origin router turns an authenticated profile endpoint into a public one. Written as a layout sample, not as a record of a real challenge."
+tags: ["web", "cache", "authz"]
+sample: true
+---
+
+> **This is sample content.** It exists so the writeup template, code
+> highlighting and typography can be reviewed before the team publishes real
+> material. The target described here is fictional. Replace this file with an
+> actual writeup and delete the `sample: true` frontmatter flag.
+
+## The primitive
+
+The application sits behind an edge cache configured to treat anything with a
+static-looking suffix as public and cacheable. The origin, meanwhile, resolves
+routes by prefix and ignores trailing path segments it does not recognise.
+
+Those two rules do not agree with each other, and the gap between them is the
+bug. The cache decides what is public by looking at the end of the path; the
+origin decides what to serve by looking at the start of it.
+
+```http
+GET /api/v2/me/avatar.css HTTP/1.1
+Host: dashboard.example
+Cookie: session=<victim session>
+```
+
+The origin matches `/api/v2/me`, discards `/avatar.css`, and returns the
+authenticated profile document — including the tenant identifier and the
+session's API token. The edge sees `.css`, decides the response is a static
+asset, and stores it under a key that carries no `Vary: Cookie`.
+
+Anyone who then requests the same URL is served the victim's profile from
+cache.
+
+## Confirming it
+
+The first task is proving the response is genuinely shared rather than
+being re-fetched per client. Two signals settle it:
+
+```bash
+# Prime the cache as the victim, then read it back with no credentials at all.
+curl -s -H "Cookie: session=$VICTIM" \
+     -D headers-primed.txt \
+     https://dashboard.example/api/v2/me/avatar.css > primed.json
+
+curl -s -D headers-cold.txt \
+     https://dashboard.example/api/v2/me/avatar.css > cold.json
+
+diff primed.json cold.json && echo "IDENTICAL — response is shared"
+grep -i '^(age|x-cache|cf-cache-status):' headers-cold.txt
+```
+
+`X-Cache: HIT` on a request that carried no cookie, with a body identical to
+the authenticated one, is the finding. The `Age` header gives the window: on
+this target, 600 seconds.
+
+## Impact
+
+The profile document contains a bearer token scoped to the tenant. That moves
+this from "information disclosure" to account takeover, because the token is
+accepted by the same API that issued it:
+
+| Step | Result |
+|---|---|
+| Poisoned URL requested unauthenticated | Victim profile returned from edge cache |
+| Bearer token extracted from the document | Valid for the victim's tenant |
+| Token replayed against `/api/v2/tenant/members` | Full member list, including invite tokens |
+
+The severity argument is not that a cache returned a document. It is that an
+unauthenticated attacker who can guess a URL shape ends up holding a working
+credential.
+
+## Why the obvious fix is not enough
+
+Adding `Vary: Cookie` to the response makes the immediate reproduction fail,
+which is why it is the fix teams usually reach for first. It does not address
+the primitive: the origin still serves an authenticated document at a path
+that looks static, so any future cache layer, CDN migration or reverse proxy
+reintroduces the same bug.
+
+The durable fix is agreement between the two layers:
+
+1. The origin rejects unrecognised trailing segments instead of discarding
+   them — `/api/v2/me/avatar.css` should be a 404, not a profile.
+2. Authenticated responses carry `Cache-Control: private, no-store`, set at
+   the framework level rather than per route.
+3. The edge caches on an explicit allowlist of paths, not on a suffix
+   heuristic.
+
+Any one of those closes the reproduction. All three close the class.
+
+## Notes for the reader
+
+Path confusion between two components that each parse a URL differently is a
+recurring shape, not a single bug. When reviewing a target, it is worth
+writing down — explicitly — what each layer believes about the same request.
+Where two answers differ, there is usually something to find.

