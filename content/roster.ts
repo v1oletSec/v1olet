@@ -45,7 +45,7 @@ export const roster: Member[] = [
     tier: "captain",
     specialty: "Generalist",
     quote: "A man who has not hit his Claude limit by noon has wasted his morning. -Socrates",
-    description: "Core member. True all-rounder - equally comfortable across OSINT, web, reverse engineering, and misc challenges.",
+    description: "Co-captain. True all-rounder - equally comfortable across OSINT, web, reverse engineering, and misc challenges.",
     skills: ["osint", "web", "rev", "misc", "ai"],
     avatar: "/avatars/ra1ncandy.webp",
     links: {
