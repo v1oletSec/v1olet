@@ -83,6 +83,14 @@ const contrast = (a: string, b: string): number => {
 };
 
 const pairs: Pair[] = [
+  // --- temporary construction screen ---
+  { name: 'construction · headline', fg: '#c3afed', bg: '#08070c', level: 'large' },
+  { name: 'construction · body', fg: '#b9b2c9', bg: '#08070c', level: 'body' },
+  { name: 'construction · muted text', fg: '#a6a1b4', bg: '#08070c', level: 'body' },
+  { name: 'construction · button text', fg: '#f6f3ff', bg: '#181023', level: 'body' },
+  { name: 'construction · button border', fg: '#8060b9', bg: '#08070c', level: 'ui' },
+  { name: 'construction · arrow', fg: '#08070c', bg: '#9163ef', level: 'ui' },
+  { name: 'construction · focus ring', fg: '#c5a6ff', bg: '#08070c', level: 'ui' },
   // --- light theme ---
   { name: 'light · body on surface', fg: light.fg, bg: light.surface, level: 'body' },
   { name: 'light · muted on surface', fg: light.fgMuted, bg: light.surface, level: 'body' },
