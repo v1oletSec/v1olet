@@ -1,0 +1,72 @@
+.page {
+  --construction-muted: #a6a1b4;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  overflow: clip;
+  background: #08070c;
+  color: #f6f3ff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.page::before {
+  content: '';
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 46%, #29124870 0%, #150d2230 36%, transparent 65%);
+  pointer-events: none;
+}
+.canvas { position: absolute; z-index: -1; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.vignette {
+  position: absolute; z-index: -1; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 20%, #08070c40 60%, #08070ce6 100%);
+}
+.header, .footer { display: flex; align-items: center; justify-content: space-between; padding: 30px 48px; }
+.brand { display: inline-flex; align-items: center; border-radius: 4px; }
+.brand img { display: block; width: 116px; height: auto; }
+.status, .eyebrow, .destination, .footer { font-family: 'Courier New', Courier, monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.12em; }
+.status { display: inline-flex; align-items: center; gap: 10px; color: #c0bace; }
+.status > span { width: 5px; height: 5px; border-radius: 50%; background: #ad85ff; box-shadow: 0 0 12px #ad85ff70; }
+.main { display: grid; place-items: center; flex: 1; padding: 70px 24px 90px; }
+.content { text-align: center; animation: enter 1.2s ease both; }
+.eyebrow { margin: 0 0 28px; color: #c6b5ef; letter-spacing: 0.22em; }
+.eyebrow span { color: #8762c3; margin: 0 9px; }
+.title { margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: clamp(54px, 7.7vw, 112px); font-weight: 700; line-height: 0.94; letter-spacing: -0.075em; text-wrap: nowrap; text-shadow: 0 2px 34px #08070c; }
+.title > span:not(.period) { color: #c3afed; }
+.title > .period { color: #9768ff; }
+.description { margin: 28px 0 34px; font-size: 14px; line-height: 1.6; color: #b9b2c9; }
+.cta { display: inline-flex; min-height: 54px; align-items: center; gap: 26px; padding: 6px 7px 6px 21px; border: 1px solid #8060b9; border-radius: 7px; background: #181023cc; color: #f6f3ff; text-decoration: none; font-size: 13px; font-weight: 500; transition: border-color 180ms, background 180ms, box-shadow 180ms; }
+.ctaArrow { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 4px; background: #9163ef; color: #08070c; transition: background 180ms; }
+.ctaArrow svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.7; transition: transform 180ms; }
+.cta:hover { background: #241636; border-color: #bd9bff; box-shadow: 0 0 32px #9163ef1a; }
+.cta:hover .ctaArrow { background: #b38aff; }
+.cta:hover svg { transform: translate(2px, -2px); }
+.page a:focus-visible { outline: 2px solid #c5a6ff; outline-offset: 6px; }
+.destination { display: block; margin-top: 15px; color: var(--construction-muted); font-size: 10px; letter-spacing: 0.06em; }
+.footer { gap: 24px; padding-bottom: 28px; color: var(--construction-muted); font-size: 9px; }
+.footerNote { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.footerNote > span { color: #ad85ff; margin-right: 8px; }
+.footerMark { letter-spacing: 0.15em; }
+@keyframes enter { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@media (min-width: 1600px) { .main { padding-block: 110px 130px; } }
+@media (max-width: 640px) {
+  .header { padding: 26px 24px; }
+  .brand img { width: 94px; }
+  .status { font-size: 8px; letter-spacing: 0.06em; gap: 7px; }
+  .main { padding: 75px 16px 90px; }
+  .eyebrow { font-size: 9px; margin-bottom: 25px; }
+  .title { font-size: clamp(43px, 11.4vw, 70px); }
+  .description { font-size: 13px; margin: 25px 0 29px; }
+  .footer { padding: 24px; font-size: 8px; }
+  .footerNote { display: none; }
+}
+@media (max-height: 580px) and (min-width: 641px) {
+  .header, .footer { padding-block: 18px; }
+  .main { padding-block: 25px; }
+  .title { font-size: 64px; }
+  .eyebrow { margin-bottom: 18px; }
+  .description { margin: 18px 0 20px; }
+}
+@media (prefers-reduced-motion: reduce) { .content { animation: none; } .page *, .page *::before, .page *::after { transition: none; } }
